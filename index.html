@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex">
+<title>Apresentações</title>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root { --red:#D21217; --ink:#16181a; --gray:#9a9ea1; --line:rgba(255,255,255,0.1); }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+        font-family:'Montserrat',sans-serif; background:
+            radial-gradient(900px 600px at 85% -10%, rgba(210,18,23,0.18), transparent 60%), var(--ink);
+        color:#fff; min-height:100vh; padding:80px 28px;
+    }
+    .wrap { max-width:960px; margin:0 auto; }
+    header { border-bottom:1px solid var(--line); padding-bottom:36px; margin-bottom:48px; }
+    .eyebrow { font-family:'Oswald',sans-serif; font-weight:600; letter-spacing:0.22em;
+        text-transform:uppercase; color:var(--gray); font-size:15px; }
+    h1 { font-family:'Oswald',sans-serif; font-weight:700; font-size:64px; line-height:1; margin-top:14px; }
+    h1 .hl { color:var(--red); }
+    .group { margin-bottom:48px; }
+    .group h2 { font-family:'Oswald',sans-serif; font-weight:600; font-size:24px;
+        text-transform:uppercase; letter-spacing:0.08em; color:var(--gray); margin-bottom:18px;
+        display:flex; align-items:center; gap:14px; }
+    .group h2::before { content:""; width:24px; height:5px; background:var(--red); border-radius:2px; }
+    a.deck {
+        display:flex; align-items:center; justify-content:space-between;
+        background:linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02));
+        border:1px solid var(--line); border-left:4px solid var(--red);
+        border-radius:12px; padding:24px 28px; text-decoration:none; color:#fff;
+        margin-bottom:14px; transition:transform .2s ease, border-color .2s ease, background .2s ease;
+    }
+    a.deck:hover { transform:translateX(6px); border-left-color:#fff; background:rgba(255,255,255,0.07); }
+    a.deck .title { font-family:'Oswald',sans-serif; font-weight:600; font-size:26px; }
+    a.deck .meta { font-size:14px; color:var(--gray); margin-top:4px; }
+    a.deck .arrow { font-size:26px; color:var(--red); }
+    footer { margin-top:60px; padding-top:24px; border-top:1px solid var(--line);
+        color:var(--gray); font-size:13px; letter-spacing:0.04em; }
+</style>
+</head>
+<body>
+<div class="wrap">
+    <header>
+        <div class="eyebrow">Central de apresentações</div>
+        <h1>Decks<span class="hl">.</span></h1>
+    </header>
+
+    <!-- ====== CLIENTE: FAST ====== -->
+    <section class="group">
+        <h2>Fast Sistemas Construtivos</h2>
+        <a class="deck" href="fast/falta-de-resposta-varejo.html">
+            <span>
+                <span class="title">Falta de Resposta — o maior vetor da queda de qualificação</span>
+                <span class="meta">Funil de varejo · jan–jun 2026</span>
+            </span>
+            <span class="arrow">→</span>
+        </a>
+    </section>
+
+    <footer>Para adicionar um novo deck: jogue o HTML numa pasta do cliente e crie um link aqui no index.</footer>
+</div>
+</body>
+</html>
