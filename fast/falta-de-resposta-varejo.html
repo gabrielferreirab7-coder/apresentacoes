@@ -228,6 +228,35 @@ em.red { color: var(--red); font-style: normal; font-weight: 700; }
 .slide.dense .card { padding: 28px 32px; }
 .slide.dense .card p { font-size: 19px; }
 
+/* gráfico de silêncio mensal (% de leads que morrem sem responder) */
+.monthchart { display: flex; align-items: flex-end; gap: 30px; height: 300px; margin: 66px 0 0; padding: 0 8px; }
+.mbar { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; gap: 16px; height: 100%; }
+.mbar .col {
+    width: 100%; max-width: 118px; height: 0;
+    background: linear-gradient(180deg, var(--red), var(--red-dark));
+    border-radius: 6px 6px 0 0; position: relative;
+    transition: height 1s var(--ease) 0.3s;
+}
+.slide.visible .monthchart .col { height: var(--h); }
+.mbar .pct {
+    position: absolute; top: -48px; left: 50%; transform: translateX(-50%);
+    font-family: var(--font-display); font-weight: 700; font-size: 36px; color: #fff; white-space: nowrap;
+}
+.mbar .mo {
+    font-family: var(--font-body); font-weight: 600; font-size: 21px;
+    color: var(--gray-light); text-transform: uppercase; letter-spacing: 0.06em;
+}
+/* junho — menor silêncio do ano, destacado em positivo */
+.mbar.best .col { box-shadow: 0 0 0 3px rgba(255,206,0,0.9); }
+.mbar.best .pct, .mbar.best .mo { color: var(--gold); }
+.note-box {
+    margin-top: 42px; max-width: 1680px;
+    background: linear-gradient(90deg, rgba(255,255,255,0.05), rgba(255,255,255,0.015));
+    border: 1px solid rgba(255,255,255,0.08); border-left: 5px solid var(--gold);
+    border-radius: 12px; padding: 26px 34px; font-size: 22px; line-height: 1.5; color: var(--gray-light);
+}
+.note-box b { color: #fff; }
+
 /* lista de ações numeradas */
 .steps { display: flex; flex-direction: column; gap: 26px; margin-top: 52px; max-width: 1500px; }
 .step {
@@ -493,7 +522,7 @@ body.editing [contenteditable] { outline: 2px dashed rgba(255,206,0,0.6); outlin
                 </div>
             </div>
         </div>
-        <div class="pageno"><b>02</b> / 09</div>
+        <div class="pageno"><b>02</b> / 11</div>
     </section>
 
     <!-- =================== SLIDE 3 — STATEMENT: A QUEDA =================== -->
@@ -511,7 +540,7 @@ body.editing [contenteditable] { outline: 2px dashed rgba(255,206,0,0.6); outlin
             <span class="delta red reveal">−28 pontos</span>
             <p class="lead reveal" style="margin-top:34px">Quando o lead conversa, qualificamos 65%. <b>O gargalo está antes da conversa.</b></p>
         </div>
-        <div class="pageno"><b>03</b> / 09</div>
+        <div class="pageno"><b>03</b> / 11</div>
     </section>
 
     <!-- =================== SLIDE 4 — O DIAGNÓSTICO =================== -->
@@ -538,14 +567,46 @@ body.editing [contenteditable] { outline: 2px dashed rgba(255,206,0,0.6); outlin
                 </div>
             </div>
         </div>
-        <div class="pageno"><b>04</b> / 09</div>
+        <div class="pageno"><b>04</b> / 11</div>
     </section>
 
-    <!-- =================== SLIDE 5 — O QUE JÁ FIZEMOS =================== -->
+    <!-- =================== SLIDE 5 — ANTES: O PROBLEMA CRESCENDO =================== -->
     <section class="slide">
         <svg class="watermark"><use href="#fast-mark"/></svg>
         <div class="topbar">
-            <div class="kicker"><span class="num">03</span> O que já fizemos</div>
+            <div class="kicker"><span class="num">02</span> O diagnóstico · a foto real</div>
+            <svg class="topbar-logo"><use href="#fast-logo"/></svg>
+        </div>
+        <div class="slide-content">
+            <div class="accent-bar reveal"></div>
+            <h2 class="h-section reveal">No começo do ano, só piorava</h2>
+            <p class="lead reveal">Antes de mexer na estrutura, o silêncio era a regra — e a curva não cedia, subia mês a mês.</p>
+            <div class="grid-3">
+                <div class="card reveal">
+                    <div class="stat"><span class="count" data-to="71">0</span><span class="suf">%</span></div>
+                    <div class="stat-label">Pico de silêncio, em março</div>
+                    <p>Começou o ano em 68% e foi subindo. Sete de cada dez leads morriam sem nunca responder.</p>
+                </div>
+                <div class="card reveal">
+                    <div class="stat">~2.500</div>
+                    <div class="stat-label">Leads no silêncio / mês</div>
+                    <p>De janeiro a março, milhares de oportunidades morrendo sem virar conversa, todo mês.</p>
+                </div>
+                <div class="card reveal">
+                    <div class="stat" style="font-size:58px;line-height:1.15">68 → 70 → 71</div>
+                    <div class="stat-label">Três meses, só subindo</div>
+                    <p>A taxa não cedia em nenhum mês. A sensação era de problema fora de controle.</p>
+                </div>
+            </div>
+        </div>
+        <div class="pageno"><b>05</b> / 11</div>
+    </section>
+
+    <!-- =================== SLIDE 6 — AÇÕES: MÍDIA =================== -->
+    <section class="slide">
+        <svg class="watermark"><use href="#fast-mark"/></svg>
+        <div class="topbar">
+            <div class="kicker"><span class="num">03</span> As ações</div>
             <svg class="topbar-logo"><use href="#fast-logo"/></svg>
         </div>
         <div class="slide-content">
@@ -567,32 +628,14 @@ body.editing [contenteditable] { outline: 2px dashed rgba(255,206,0,0.6); outlin
                 </div>
             </div>
         </div>
-        <div class="pageno"><b>05</b> / 09</div>
-    </section>
-
-    <!-- =================== SLIDE 6 — STATEMENT: A VIRADA =================== -->
-    <section class="slide">
-        <div class="topbar">
-            <div class="kicker"><span class="num">03</span> O que já fizemos · o resultado</div>
-            <svg class="topbar-logo"><use href="#fast-logo"/></svg>
-        </div>
-        <div class="slide-content statement">
-            <div class="accent-bar reveal"></div>
-            <p class="lead reveal" style="margin-bottom:10px">A qualificação saiu do platô de abr–mai e virou a chave em junho:</p>
-            <div class="bigfig reveal">
-                21<span class="arrow">→</span><span class="up">31</span><span class="suf" style="font-size:120px;color:var(--gray)">%</span>
-            </div>
-            <span class="delta reveal">+10 pontos · melhor patamar do ano</span>
-            <p class="lead reveal" style="margin-top:34px"><b>Primeira inflexão consistente da curva.</b> E a raiz ainda nem foi tocada.</p>
-        </div>
-        <div class="pageno"><b>06</b> / 09</div>
+        <div class="pageno"><b>06</b> / 11</div>
     </section>
 
     <!-- =================== SLIDE 7 — FOMOS NA RAIZ (EXECUTADO) =================== -->
     <section class="slide dense">
         <svg class="watermark"><use href="#fast-mark"/></svg>
         <div class="topbar">
-            <div class="kicker"><span class="num">04</span> O que executamos</div>
+            <div class="kicker"><span class="num">03</span> As ações · a raiz</div>
             <svg class="topbar-logo"><use href="#fast-logo"/></svg>
         </div>
         <div class="slide-content">
@@ -624,10 +667,52 @@ body.editing [contenteditable] { outline: 2px dashed rgba(255,206,0,0.6); outlin
                 <span class="tag">Franquia separada do varejo</span>
             </div>
         </div>
-        <div class="pageno"><b>07</b> / 09</div>
+        <div class="pageno"><b>07</b> / 11</div>
     </section>
 
-    <!-- =================== SLIDE 8 — COMO MEDIR =================== -->
+    <!-- =================== SLIDE 8 — DEPOIS: A CURVA DO SILÊNCIO =================== -->
+    <section class="slide dense">
+        <svg class="watermark"><use href="#fast-mark"/></svg>
+        <div class="topbar">
+            <div class="kicker"><span class="num">04</span> O efeito</div>
+            <svg class="topbar-logo"><use href="#fast-logo"/></svg>
+        </div>
+        <div class="slide-content">
+            <div class="accent-bar reveal"></div>
+            <h2 class="h-section reveal">A curva do silêncio virou</h2>
+            <p class="lead reveal">% de leads que morrem sem responder, mês a mês. De 71% em março para 30% em junho:</p>
+            <div class="monthchart reveal">
+                <div class="mbar"><div class="col" style="--h:287px"><span class="pct">68%</span></div><span class="mo">Jan</span></div>
+                <div class="mbar"><div class="col" style="--h:296px"><span class="pct">70%</span></div><span class="mo">Fev</span></div>
+                <div class="mbar"><div class="col" style="--h:300px"><span class="pct">71%</span></div><span class="mo">Mar</span></div>
+                <div class="mbar"><div class="col" style="--h:250px"><span class="pct">59%</span></div><span class="mo">Abr</span></div>
+                <div class="mbar"><div class="col" style="--h:262px"><span class="pct">62%</span></div><span class="mo">Mai</span></div>
+                <div class="mbar best"><div class="col" style="--h:127px"><span class="pct">30%</span></div><span class="mo">Jun</span></div>
+            </div>
+            <div class="note-box reveal"><b>Por que confiar nessa queda?</b> Parte é o dado ficando honesto: o que antes empilhava como silêncio agora é separado como perda real. Parte são as ações surtindo efeito. E junho em 30% é número real, não promessa: o lead responde em até dois dias e a SDR já dá perdido por falta de retorno na segunda tentativa.</div>
+        </div>
+        <div class="pageno"><b>08</b> / 11</div>
+    </section>
+
+    <!-- =================== SLIDE 9 — DEPOIS: QUALIFICAÇÃO =================== -->
+    <section class="slide">
+        <div class="topbar">
+            <div class="kicker"><span class="num">04</span> O efeito · qualificação</div>
+            <svg class="topbar-logo"><use href="#fast-logo"/></svg>
+        </div>
+        <div class="slide-content statement">
+            <div class="accent-bar reveal"></div>
+            <p class="lead reveal" style="margin-bottom:10px">A qualificação acompanhou: saiu do platô e firmou em junho:</p>
+            <div class="bigfig reveal">
+                21<span class="arrow">→</span><span class="up">31</span><span class="suf" style="font-size:120px;color:var(--gray)">%</span>
+            </div>
+            <span class="delta reveal">+10 pontos · melhor patamar do ano</span>
+            <p class="lead reveal" style="margin-top:34px"><b>Não é pico isolado:</b> junho roda em ~32% de qualificação por semana, três semanas seguidas.</p>
+        </div>
+        <div class="pageno"><b>09</b> / 11</div>
+    </section>
+
+    <!-- =================== SLIDE 10 — METAS / O ALVO =================== -->
     <section class="slide">
         <svg class="watermark"><use href="#fast-mark"/></svg>
         <div class="topbar">
@@ -643,16 +728,16 @@ body.editing [contenteditable] { outline: 2px dashed rgba(255,206,0,0.6); outlin
                     <tr><th>Indicador</th><th class="r">Hoje</th><th class="r">Onde queremos chegar</th></tr>
                 </thead>
                 <tbody>
-                    <tr><td>Taxa de silêncio mensal (varejo)</td><td class="r now">~64%</td><td class="r goal">abaixo de 35%</td></tr>
+                    <tr><td>Taxa de silêncio (média do ano)</td><td class="r now">64%</td><td class="r goal">consolidar &lt; 35%</td></tr>
                     <tr><td>Taxa maturada de qualificação</td><td class="r now">37%</td><td class="r goal">50%+</td></tr>
                 </tbody>
             </table>
             <p class="lead reveal" style="margin-top:32px">A conta por trás: como fechamos 65% de quem conversa, <b>cortar o silêncio pela metade quase dobra os qualificados</b>.</p>
         </div>
-        <div class="pageno"><b>08</b> / 09</div>
+        <div class="pageno"><b>10</b> / 11</div>
     </section>
 
-    <!-- =================== SLIDE 9 — FECHO =================== -->
+    <!-- =================== SLIDE 11 — FECHO =================== -->
     <section class="slide">
         <svg class="watermark" style="opacity:0.07"><use href="#fast-mark"/></svg>
         <div class="slide-content closing">
@@ -662,7 +747,7 @@ body.editing [contenteditable] { outline: 2px dashed rgba(255,206,0,0.6); outlin
                 <svg class="closing-logo"><use href="#fast-logo"/></svg>
             </div>
         </div>
-        <div class="pageno"><b>09</b> / 09</div>
+        <div class="pageno"><b>11</b> / 11</div>
     </section>
 
 </main>
