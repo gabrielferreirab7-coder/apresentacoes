@@ -126,8 +126,8 @@ img, video, canvas, svg { max-width: 100%; max-height: 100%; }
    =========================================== */
 .slide-content {
     position: absolute; inset: 0;
-    padding: 96px 120px;
-    display: flex; flex-direction: column; justify-content: center;
+    padding: 172px 120px 84px;
+    display: flex; flex-direction: column; justify-content: flex-start;
     z-index: 2;
 }
 /* Logos oficiais (assinatura horizontal completa) */
@@ -210,6 +210,23 @@ em.red { color: var(--red); font-style: normal; font-weight: 700; }
     text-transform: uppercase; letter-spacing: 0.03em; line-height: 1.1;
 }
 .card p { font-size: 20px; line-height: 1.5; color: var(--gray-light); }
+
+/* tags de fecho (faixa de ganhos) */
+.tag {
+    font-family: var(--font-display); font-weight: 600; font-size: 20px;
+    letter-spacing: 0.04em; text-transform: uppercase;
+    color: var(--ink); background: var(--gold);
+    padding: 10px 22px; border-radius: 6px;
+}
+
+/* slide denso (muito conteúdo) — aperta espaçamento sem estourar o palco */
+.slide.dense .slide-content { padding-bottom: 64px; }
+.slide.dense .h-section { font-size: 74px; }
+.slide.dense .lead { margin-top: 16px; }
+.slide.dense .accent-bar { margin-bottom: 26px; }
+.slide.dense .grid-2 { margin-top: 30px; gap: 26px; }
+.slide.dense .card { padding: 28px 32px; }
+.slide.dense .card p { font-size: 19px; }
 
 /* lista de ações numeradas */
 .steps { display: flex; flex-direction: column; gap: 26px; margin-top: 52px; max-width: 1500px; }
@@ -439,7 +456,7 @@ body.editing [contenteditable] { outline: 2px dashed rgba(255,206,0,0.6); outlin
                 <svg class="cover-logo"><use href="#fast-logo"/></svg>
             </div>
             <div class="cover-main">
-                <div class="eyebrow reveal">Complemento ao plano · Estratégia Fast 2026</div>
+                <div class="eyebrow reveal">Estratégia Fast 2026 · Do diagnóstico à execução</div>
                 <h1 class="reveal">FALTA DE<br><span class="hl">RESPOSTA</span></h1>
                 <div class="sub reveal">O maior vetor da queda de qualificação</div>
             </div>
@@ -486,6 +503,7 @@ body.editing [contenteditable] { outline: 2px dashed rgba(255,206,0,0.6); outlin
             <svg class="topbar-logo"><use href="#fast-logo"/></svg>
         </div>
         <div class="slide-content statement">
+            <div class="accent-bar reveal"></div>
             <p class="lead reveal" style="margin-bottom:10px">A falta de resposta, sozinha, derruba a taxa maturada de qualificação:</p>
             <div class="bigfig reveal">
                 65<span class="arrow">→</span><span class="to">37</span><span class="suf" style="font-size:120px;color:var(--gray)">%</span>
@@ -559,6 +577,7 @@ body.editing [contenteditable] { outline: 2px dashed rgba(255,206,0,0.6); outlin
             <svg class="topbar-logo"><use href="#fast-logo"/></svg>
         </div>
         <div class="slide-content statement">
+            <div class="accent-bar reveal"></div>
             <p class="lead reveal" style="margin-bottom:10px">A qualificação saiu do platô de abr–mai e virou a chave em junho:</p>
             <div class="bigfig reveal">
                 21<span class="arrow">→</span><span class="up">31</span><span class="suf" style="font-size:120px;color:var(--gray)">%</span>
@@ -569,30 +588,40 @@ body.editing [contenteditable] { outline: 2px dashed rgba(255,206,0,0.6); outlin
         <div class="pageno"><b>06</b> / 09</div>
     </section>
 
-    <!-- =================== SLIDE 7 — A PRÓXIMA FRENTE =================== -->
-    <section class="slide">
+    <!-- =================== SLIDE 7 — FOMOS NA RAIZ (EXECUTADO) =================== -->
+    <section class="slide dense">
         <svg class="watermark"><use href="#fast-mark"/></svg>
         <div class="topbar">
-            <div class="kicker"><span class="num">04</span> A próxima frente</div>
+            <div class="kicker"><span class="num">04</span> O que executamos</div>
             <svg class="topbar-logo"><use href="#fast-logo"/></svg>
         </div>
         <div class="slide-content">
             <div class="accent-bar reveal"></div>
-            <h2 class="h-section reveal">O que falta pra resolver de vez</h2>
-            <p class="lead reveal">A raiz é o <em class="red">rastreamento</em>. Nenhuma otimização tocou nela ainda. É pra onde vamos agora.</p>
-            <div class="steps">
-                <div class="step reveal">
-                    <div class="idx">1</div>
-                    <div><h3>Rastreamento na entrada</h3><p>Capturar a origem do click-to-WhatsApp (clique, campanha, mensagem) e gravar automático no CRM. Acaba com a cegueira de 64% do tráfego.</p></div>
+            <h2 class="h-section reveal">Fomos na raiz: o rastreamento</h2>
+            <p class="lead reveal">A correção estrutural <b>já está no ar</b>. Não é resultado medido ainda: é a fundação. Pela primeira vez dá pra ver de onde vem cada lead e otimizar com dado real.</p>
+            <div class="grid-2">
+                <div class="card reveal">
+                    <div class="stat-label" style="color:var(--gold)">Toda origem rastreada na entrada</div>
+                    <p>Cada lead entra sabendo de onde veio: canal, campanha, anúncio. Gravado sozinho, sem ninguém digitar. Acabou a cegueira nos 64% do tráfego.</p>
                 </div>
-                <div class="step reveal">
-                    <div class="idx">2</div>
-                    <div><h3>Travar o campo "Origem"</h3><p>Origem só automática, sem edição manual. Status de resposta vai pra campo próprio. Libera a SDR pra atender, não digitar.</p></div>
+                <div class="card reveal">
+                    <div class="stat-label" style="color:var(--gold)">WhatsApp orgânico deixou de ser "desconhecido"</div>
+                    <p>Quem chega pelo WhatsApp sem rastreio agora tem a origem identificada automaticamente. Atribuição de verdade, a custo zero.</p>
                 </div>
-                <div class="step reveal">
-                    <div class="idx">3</div>
-                    <div><h3>Velocidade de primeira resposta</h3><p>Parte do silêncio é resposta tardia, não lead inexistente. Medir e reduzir o tempo até o primeiro contato.</p></div>
+                <div class="card reveal">
+                    <div class="stat-label" style="color:var(--gold)">Um cliente, um cadastro</div>
+                    <p>O mesmo cliente parou de virar vários registros soltos. Recompra e novas oportunidades ficam no mesmo nome, rastreáveis.</p>
                 </div>
+                <div class="card reveal">
+                    <div class="stat-label" style="color:var(--gold)">Origem padronizada e travada</div>
+                    <p>Fim da digitação manual que corrompia a base. Um código por canal. O relatório de canal voltou a fechar.</p>
+                </div>
+            </div>
+            <div class="reveal" style="margin-top:36px; display:flex; gap:14px; flex-wrap:wrap;">
+                <span class="tag">Sem perder captação na virada</span>
+                <span class="tag">Sem ferramenta nova</span>
+                <span class="tag">Custo zero</span>
+                <span class="tag">Franquia separada do varejo</span>
             </div>
         </div>
         <div class="pageno"><b>07</b> / 09</div>
@@ -602,22 +631,23 @@ body.editing [contenteditable] { outline: 2px dashed rgba(255,206,0,0.6); outlin
     <section class="slide">
         <svg class="watermark"><use href="#fast-mark"/></svg>
         <div class="topbar">
-            <div class="kicker"><span class="num">05</span> Metas</div>
+            <div class="kicker"><span class="num">05</span> O alvo</div>
             <svg class="topbar-logo"><use href="#fast-logo"/></svg>
         </div>
         <div class="slide-content">
             <div class="accent-bar reveal"></div>
-            <h2 class="h-section reveal">Como vamos medir</h2>
+            <h2 class="h-section reveal">O que isso destrava</h2>
+            <p class="lead reveal">Antes a gente nem conseguia medir essa perda; agora consegue. Os números são a <b>meta que passamos a perseguir</b>, não resultado apurado.</p>
             <table class="kpi reveal">
                 <thead>
-                    <tr><th>KPI</th><th class="r">Hoje</th><th class="r">Meta</th></tr>
+                    <tr><th>Indicador</th><th class="r">Hoje</th><th class="r">Onde queremos chegar</th></tr>
                 </thead>
                 <tbody>
                     <tr><td>Taxa de silêncio mensal (varejo)</td><td class="r now">~64%</td><td class="r goal">abaixo de 35%</td></tr>
-                    <tr><td>Taxa maturada (efeito esperado)</td><td class="r now">37%</td><td class="r goal">50%+</td></tr>
+                    <tr><td>Taxa maturada de qualificação</td><td class="r now">37%</td><td class="r goal">50%+</td></tr>
                 </tbody>
             </table>
-            <p class="lead reveal" style="margin-top:50px">Com o fechamento de 65% sobre quem conversa, <b>cortar o silêncio pela metade quase dobra os qualificados</b> entregues ao comercial.</p>
+            <p class="lead reveal" style="margin-top:32px">A conta por trás: como fechamos 65% de quem conversa, <b>cortar o silêncio pela metade quase dobra os qualificados</b>.</p>
         </div>
         <div class="pageno"><b>08</b> / 09</div>
     </section>
@@ -627,7 +657,7 @@ body.editing [contenteditable] { outline: 2px dashed rgba(255,206,0,0.6); outlin
         <svg class="watermark" style="opacity:0.07"><use href="#fast-mark"/></svg>
         <div class="slide-content closing">
             <div class="accent-bar reveal"></div>
-            <div class="punch reveal">Cortar o silêncio pela metade <b>quase dobra</b> os leads qualificados entregues ao comercial. <span class="gold">Sem gastar um real a mais de mídia.</span></div>
+            <div class="punch reveal">Corrigimos a raiz: <b>todo lead rastreado</b>, todo cliente num cadastro só, relatório de canal fechando. Agora dá pra medir o silêncio e atacá-lo com dado, rumo a quase dobrar os qualificados. <span class="gold">Tudo a custo zero.</span></div>
             <div class="sign reveal">
                 <svg class="closing-logo"><use href="#fast-logo"/></svg>
             </div>
