@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Franquia Steel Conecta — Apresentação Comercial</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+/* ===========================================
+   TEMA — variáveis da marca Steel Conecta
+   (manual de identidade visual oficial)
+   =========================================== */
+:root{
+  --azul:#174263;          /* azul primário */
+  --azul-esc:#143A57;      /* azul escuro */
+  --azul-med:#1d537c;      /* azul do painel */
+  --azul-claro:#668CAD;    /* azul de apoio */
+  --dourado:#DBA04E;       /* dourado (destaque) */
+  --dourado-esc:#9C7237;   /* dourado escuro (texto sobre claro) */
+  --preto:#1A1A1A;
+  --branco:#F5F5F7;
+  --texto:#3a4650;         /* corpo sobre fundo claro */
+  --texto-2:#6b7580;       /* secundário */
+  /* cores das empresas do ecossistema */
+  --c-fast:#7D1716;        /* Fast Sistemas */
+  --c-nova:#0896D1;        /* Nova Metálica */
+  --c-homes:#828E51;       /* Fast Homes/Obras */
+  --c-unity:#213242;       /* Unity */
+  --font:'Urbanist',sans-serif;
+  --ease:cubic-bezier(.16,1,.3,1);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+
+/* ===========================================
+   FIXED 16:9 STAGE (viewport-base.css) — obrigatório
+   =========================================== */
+html,body{width:100%;height:100%;margin:0;overflow:hidden;background:#0b0d10}
+.deck-viewport{position:fixed;inset:0;overflow:hidden;background:#0b0d10}
+.deck-stage{position:absolute;left:0;top:0;width:1920px;height:1080px;overflow:hidden;transform-origin:0 0;background:var(--branco)}
+.slide{position:absolute;inset:0;width:1920px;height:1080px;overflow:hidden;display:block;visibility:hidden;opacity:0;pointer-events:none;background:var(--branco)}
+.slide.active,.slide.visible{visibility:visible;opacity:1;pointer-events:auto;z-index:1}
+img,video,canvas,svg{max-width:100%;max-height:100%}
+.deck-controls{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);z-index:1000}
+@media print{
+  html,body{width:1920px;height:auto;overflow:visible;background:#fff}
+  .deck-viewport{position:static;overflow:visible;background:#fff}
+  .deck-stage{position:static;width:auto;height:auto;transform:none!important;background:none}
+  .slide{position:relative;display:block!important;visibility:visible!important;opacity:1!important;pointer-events:auto!important;width:1920px;height:1080px;break-after:page;page-break-after:always}
+  .slide:last-child{break-after:auto;page-break-after:auto}
+  .deck-controls{display:none!important}
+}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.2s!important}}
+
+/* ===========================================
+   TIPOGRAFIA & BASE
+   =========================================== */
+.slide{font-family:var(--font);color:var(--texto);
+  background:radial-gradient(1200px 820px at 82% 12%,#ffffff 0%,rgba(255,255,255,0) 60%),linear-gradient(155deg,#ffffff 0%,#F5F5F7 60%,#EAEDF0 100%)}
+.slide.dark{color:#fff;background:radial-gradient(1300px 900px at 72% 28%,#1d537c 0%,rgba(29,83,124,0) 60%),linear-gradient(155deg,#143A57 0%,#0f2f47 62%,#0a2338 100%)}
+
+/* padrão de treliça decorativo */
+.mesh-deco{position:absolute;color:var(--dourado);opacity:.09;pointer-events:none}
+.slide.dark .mesh-deco{color:#fff;opacity:.07}
+.mesh-deco svg{width:100%;height:100%}
+
+/* header comum */
+.top{position:absolute;left:96px;right:96px;top:70px;display:flex;align-items:center;justify-content:space-between;z-index:5}
+.lock{display:flex;align-items:center;gap:15px}
+.lock .ico{width:44px;height:44px;color:var(--dourado)}
+.lock .wm{font-weight:800;font-size:22px;letter-spacing:.02em;line-height:1;color:var(--azul)}
+.lock .wm .s{color:var(--dourado)}
+.slide.dark .lock .wm{color:#fff}
+.top .pg{font-size:19px;font-weight:600;letter-spacing:.18em;color:var(--texto-2)}
+.slide.dark .top .pg{color:#9fb2c2}
+.top .pg b{color:var(--dourado)}
+
+/* blocos de conteúdo */
+.body{position:absolute;left:96px;right:96px;top:196px;bottom:92px}
+.kicker{font-size:23px;font-weight:700;letter-spacing:.34em;text-transform:uppercase;color:var(--dourado-esc);margin-bottom:26px}
+.slide.dark .kicker{color:var(--dourado)}
+h2{font-size:80px;line-height:1.02;font-weight:800;color:var(--azul-esc);letter-spacing:-.02em;max-width:1500px}
+.slide.dark h2{color:#fff}
+h2 .hl{color:var(--dourado)}
+.lead{font-size:33px;font-weight:400;line-height:1.42;color:var(--texto);max-width:1180px}
+.slide.dark .lead{color:#c6d3de}
+
+/* rodapé fino */
+.tick{position:absolute;left:96px;bottom:52px;font-size:19px;font-weight:500;color:var(--texto-2)}
+.slide.dark .tick{color:#8ba0b2}
+.note{font-size:18px;font-weight:500;color:var(--texto-2);font-style:italic}
+
+/* ===== ANIMAÇÕES ===== */
+.reveal{opacity:0;transform:translateY(32px);transition:opacity .7s var(--ease),transform .7s var(--ease);transition-delay:var(--d,0s)}
+.slide.active .reveal{opacity:1;transform:none}
+.pop{opacity:0;transform:scale(.9);transition:opacity .8s var(--ease),transform .8s var(--ease);transition-delay:var(--d,0s)}
+.slide.active .pop{opacity:1;transform:none}
+.grow{transform:scaleX(0);transform-origin:left;transition:transform .9s var(--ease);transition-delay:var(--d,0s)}
+.slide.active .grow{transform:scaleX(1)}
+
+/* ===== CAPA (slide 1) — estilo split 360° ===== */
+.cover{position:absolute;inset:0}
+.cover .left{position:absolute;left:0;top:0;width:1160px;height:100%;padding:96px 90px}
+.cover .clock{display:flex;align-items:center;gap:16px;margin-bottom:150px}
+.cover .clock .ico{width:56px;height:56px;color:var(--dourado)}
+.cover .clock .wm{font-weight:800;font-size:27px;letter-spacing:.02em}
+.cover .clock .wm .s{color:var(--dourado)} .cover .clock .wm .c{color:var(--azul)}
+.cover h1{font-size:100px;line-height:.99;font-weight:800;color:var(--azul-esc);letter-spacing:-.02em}
+.cover h1 .hl{color:var(--dourado)}
+.cover .csub{margin-top:34px;font-size:30px;color:var(--texto);max-width:820px;line-height:1.4}
+.cover .ctag{position:absolute;left:90px;bottom:78px;font-size:21px;font-weight:600;color:var(--azul)}
+.cover .right{position:absolute;right:0;top:0;width:760px;height:100%;overflow:hidden;
+  background:radial-gradient(700px 700px at 60% 35%,#1d537c,#143A57 72%);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff}
+.cover .right .rmesh{position:absolute;inset:0;color:#fff;opacity:.08;display:flex;align-items:center;justify-content:center}
+.cover .right .rmesh svg{width:820px;height:820px;transform:rotate(6deg)}
+.cover .big{font-size:270px;font-weight:900;line-height:.85;color:var(--dourado);letter-spacing:-.03em;position:relative}
+.cover .big span{font-size:118px;vertical-align:super}
+.cover .cap{position:relative;margin-top:16px;font-size:29px;font-weight:700;letter-spacing:.2em;text-transform:uppercase}
+.cover .cap b{color:var(--dourado)}
+.cover .capsub{position:relative;margin-top:14px;font-size:21px;color:#c6d3de;max-width:470px;text-align:center;line-height:1.4}
+
+/* ===== grids/cards genéricos ===== */
+.cards{display:grid;gap:26px;margin-top:52px}
+.cards.c2{grid-template-columns:1fr 1fr}
+.cards.c3{grid-template-columns:repeat(3,1fr)}
+.cards.c4{grid-template-columns:repeat(4,1fr)}
+.card{background:#fff;border:1.5px solid rgba(20,58,87,.10);border-radius:22px;padding:38px 34px;box-shadow:0 18px 40px -28px rgba(20,58,87,.35)}
+.slide.dark .card{background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.14);box-shadow:none}
+.card .cnum{font-size:26px;font-weight:800;color:var(--dourado);margin-bottom:16px}
+.card h3{font-size:30px;font-weight:700;color:var(--azul-esc);margin-bottom:12px;line-height:1.1}
+.slide.dark .card h3{color:#fff}
+.card p{font-size:23px;line-height:1.4;color:var(--texto)}
+.slide.dark .card p{color:#c6d3de}
+.card .chip{width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center;margin-bottom:20px;font-size:26px;font-weight:800;color:#fff;background:var(--azul)}
+
+/* lista de gargalos */
+.problist{display:flex;flex-direction:column;gap:22px;margin-top:48px;max-width:1400px}
+.problist .row{display:flex;align-items:center;gap:26px;background:#fff;border:1.5px solid rgba(20,58,87,.10);border-left:6px solid var(--dourado);border-radius:16px;padding:26px 32px;box-shadow:0 14px 34px -28px rgba(20,58,87,.4)}
+.problist .row .x{flex:none;width:46px;height:46px;border-radius:50%;background:rgba(125,23,22,.10);color:var(--c-fast);display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:800}
+.problist .row p{font-size:28px;font-weight:500;color:var(--azul-esc)}
+.problist .row p b{color:var(--c-fast);font-weight:700}
+
+/* stat / número em destaque */
+.statgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:30px;margin-top:56px}
+.stat .n{font-size:104px;font-weight:900;color:var(--dourado);line-height:.9;letter-spacing:-.02em}
+.stat .n small{font-size:46px;font-weight:800}
+.stat .l{margin-top:14px;font-size:24px;font-weight:600;color:var(--azul-esc);line-height:1.25}
+.slide.dark .stat .l{color:#cfe0ee}
+
+/* ===== ecossistema (slide 6) ===== */
+.eco{position:relative;width:100%;height:640px;margin-top:20px}
+.eco .hub{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:300px;height:300px;border-radius:50%;
+  background:radial-gradient(circle,#1d537c,#143A57);color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;
+  box-shadow:0 26px 60px -20px rgba(20,58,87,.7);z-index:3;border:3px solid var(--dourado)}
+.eco .hub .ico{width:76px;height:76px;color:var(--dourado);margin-bottom:12px}
+.eco .hub .t{font-weight:800;font-size:26px;letter-spacing:.02em}
+.eco .hub .t .s{color:var(--dourado)}
+.eco .hub .d{font-size:16px;color:#c6d3de;margin-top:6px}
+.eco .node{position:absolute;width:340px;padding:26px 28px;background:#fff;border-radius:18px;border:1.5px solid rgba(20,58,87,.12);
+  box-shadow:0 18px 44px -26px rgba(20,58,87,.5);z-index:2}
+.eco .node .h{display:flex;align-items:center;gap:14px;margin-bottom:10px}
+.eco .node .dot{width:20px;height:20px;border-radius:6px;flex:none}
+.eco .node .h b{font-size:24px;font-weight:800;color:var(--azul-esc)}
+.eco .node p{font-size:19px;line-height:1.32;color:var(--texto)}
+.eco .n-tl{left:70px;top:24px}
+.eco .n-tr{right:70px;top:24px}
+.eco .n-bl{left:70px;bottom:24px}
+.eco .n-br{right:70px;bottom:24px}
+.eco .n-bc{left:50%;bottom:-8px;transform:translateX(-50%)}
+
+/* pilares 360 (slide 7) */
+.method{display:flex;align-items:center;gap:18px;margin-top:40px;margin-bottom:8px;flex-wrap:wrap}
+.method .m{padding:14px 26px;border-radius:100px;background:rgba(29,83,124,.08);color:var(--azul);font-size:24px;font-weight:700}
+.method .plus{color:var(--dourado);font-weight:800;font-size:26px}
+
+/* steps (como iniciar / próximo passo) */
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:30px;margin-top:56px}
+.step{position:relative;background:#fff;border:1.5px solid rgba(20,58,87,.10);border-radius:22px;padding:40px 34px;box-shadow:0 18px 40px -28px rgba(20,58,87,.35)}
+.slide.dark .step{background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.14);box-shadow:none}
+.step .sn{width:64px;height:64px;border-radius:50%;background:var(--dourado);color:#fff;font-size:30px;font-weight:800;display:flex;align-items:center;justify-content:center;margin-bottom:24px}
+.step h3{font-size:29px;color:var(--azul-esc);font-weight:700;margin-bottom:12px}
+.slide.dark .step h3{color:#fff}
+.step p{font-size:22px;line-height:1.4;color:var(--texto)}
+.slide.dark .step p{color:#c6d3de}
+
+/* case destaque (slide 9) */
+.case{display:grid;grid-template-columns:0.95fr 1.15fr;gap:50px;margin-top:44px;align-items:center}
+.case .panel{background:radial-gradient(600px 500px at 50% 30%,#1d537c,#143A57);border-radius:28px;padding:56px 48px;color:#fff;position:relative;overflow:hidden}
+.case .panel .rmesh{position:absolute;inset:0;color:#fff;opacity:.08;display:flex;align-items:center;justify-content:center}
+.case .panel .rmesh svg{width:520px;height:520px}
+.case .panel .tagc{position:relative;font-size:20px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--dourado);margin-bottom:26px}
+.case .panel .line{position:relative;display:flex;justify-content:space-between;align-items:baseline;padding:18px 0;border-bottom:1px solid rgba(255,255,255,.16)}
+.case .panel .line:last-child{border-bottom:none}
+.case .panel .line .k{font-size:23px;color:#c6d3de}
+.case .panel .line .v{font-size:40px;font-weight:800;color:#fff}
+.case .panel .line .v.gold{color:var(--dourado)}
+.case .exp .ekicker{font-size:22px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--dourado-esc);margin-bottom:20px}
+.case .exp p{font-size:29px;line-height:1.45;color:var(--texto);margin-bottom:22px}
+.case .exp p b{color:var(--azul-esc);font-weight:700}
+.case .exp .big2{font-size:34px}
+.case .exp .big2 b{color:var(--dourado)}
+
+/* CTA final */
+.ctaband{margin-top:54px;background:radial-gradient(700px 500px at 30% 30%,#1d537c,#143A57);border-radius:26px;padding:56px 60px;color:#fff;display:flex;justify-content:space-between;align-items:center;gap:40px;position:relative;overflow:hidden}
+.ctaband .rmesh{position:absolute;right:-60px;top:-80px;width:460px;height:460px;color:#fff;opacity:.08}
+.ctaband .txt h3{font-size:52px;font-weight:800;line-height:1.05;position:relative}
+.ctaband .txt h3 .hl{color:var(--dourado)}
+.ctaband .txt p{font-size:26px;color:#c6d3de;margin-top:14px;position:relative}
+.ctaband .btn{position:relative;flex:none;background:var(--dourado);color:#173a52;font-size:30px;font-weight:800;padding:28px 44px;border-radius:16px;text-align:center;line-height:1.1}
+
+/* contato */
+.contact{display:grid;grid-template-columns:repeat(2,1fr);gap:30px;margin-top:60px;max-width:1200px}
+.contact .ci{display:flex;align-items:center;gap:22px}
+.contact .ci .ib{width:64px;height:64px;border-radius:16px;background:rgba(219,160,78,.14);color:var(--dourado);display:flex;align-items:center;justify-content:center;font-size:28px}
+.contact .ci .cl{font-size:20px;color:var(--texto-2);font-weight:600}
+.contact .ci .cv{font-size:28px;color:var(--azul-esc);font-weight:700}
+.slide.dark .contact .ci .cl{color:#9fb2c2}
+.slide.dark .contact .ci .cv{color:#fff}
+.disclaimer{position:absolute;left:96px;right:96px;bottom:44px;font-size:16px;line-height:1.4;color:var(--texto-2);font-style:italic;max-width:1500px}
+
+/* navegação / chrome */
+.nav{position:fixed;right:26px;bottom:22px;display:flex;gap:10px;z-index:1000}
+.nav button{width:52px;height:52px;border-radius:12px;border:none;background:rgba(20,58,87,.9);color:#fff;font-size:22px;cursor:pointer;transition:background .2s}
+.nav button:hover{background:var(--dourado)}
+.progress{position:fixed;left:0;top:0;height:5px;background:var(--dourado);z-index:1001;transition:width .4s var(--ease)}
+.edit-hotzone{position:fixed;top:0;left:0;width:80px;height:80px;z-index:10000;cursor:pointer}
+.edit-toggle{position:fixed;top:18px;left:18px;width:48px;height:48px;border-radius:12px;border:none;background:rgba(20,58,87,.9);color:#fff;font-size:22px;cursor:pointer;opacity:0;pointer-events:none;transition:opacity .3s;z-index:10001}
+.edit-toggle.show,.edit-toggle.active{opacity:1;pointer-events:auto}
+.edit-toggle.active{background:var(--dourado)}
+[contenteditable="true"]{outline:2px dashed var(--dourado);outline-offset:4px;border-radius:4px;cursor:text}
+</style>
+</head>
+<body>
+<!-- símbolo reutilizável: padrão de treliça da marca -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+<symbol id="mesh" viewBox="0 0 104 104" fill="none">
+<path d="M72.7475 56.3475L30.6742 101.194L1.15416 73.3142L22.4742 50.3542L26.5742 54.4542L9.35416 73.3142L30.6742 93.8142L69.2142 52.8142L73.3142 56.9142" stroke="currentColor" stroke-width="1.64"/>
+<path d="M72.4941 56.0942L62.6541 60.1942L59.3741 70.0342L49.5341 74.1342L45.4341 83.9742L36.4141 88.0742L32.3141 99.5542M27.3941 97.0942L30.6741 93.8142" stroke="currentColor" stroke-width="1.64"/>
+<path d="M27.3942 90.5342L16.7342 87.2542L11.8142 75.7742L9.35417 73.3142L5.25417 77.4142" stroke="currentColor" stroke-width="1.64"/>
+<path d="M2.79416 71.6742L16.7342 65.1142L21.6542 51.1742" stroke="currentColor" stroke-width="1.64"/>
+<path d="M31.2209 48.8409L73.2942 3.99416L102.814 31.8742L81.4942 54.8342L77.3942 50.7342L94.6142 31.8742L73.2942 11.3742L34.7542 52.3742L30.6542 48.2742" stroke="currentColor" stroke-width="1.64"/>
+<path d="M31.4742 49.0942L41.3142 44.9942L44.5942 35.1542L54.4342 31.0542L58.5342 21.2142L67.5542 17.1142L71.6542 5.63416M76.5742 8.09416L73.2942 11.3742" stroke="currentColor" stroke-width="1.64"/>
+<path d="M76.5742 14.6542L87.2342 17.9342L92.1542 29.4142L94.6142 31.8742L98.7142 27.7742" stroke="currentColor" stroke-width="1.64"/>
+<path d="M101.174 33.5142L87.2341 40.0742L82.3141 54.0142" stroke="currentColor" stroke-width="1.64"/>
+<path d="M48.4608 72.7475L3.61415 30.6742L31.4941 1.15416L54.4541 22.4742L50.3541 26.5742L31.4941 9.35416L10.9941 30.6742L51.9941 69.2142L47.8941 73.3142" stroke="currentColor" stroke-width="1.64"/>
+<path d="M48.7142 72.4942L44.6142 62.6542L34.7742 59.3742L30.6742 49.5342L20.8342 45.4342L16.7342 36.4142L5.25416 32.3142M7.71416 27.3942L10.9942 30.6742" stroke="currentColor" stroke-width="1.64"/>
+<path d="M14.2742 27.3942L17.5542 16.7342L29.0342 11.8142L31.4942 9.35416L27.3942 5.25416" stroke="currentColor" stroke-width="1.64"/>
+<path d="M33.1341 2.79416L39.6941 16.7342L53.6341 21.6542" stroke="currentColor" stroke-width="1.64"/>
+<path d="M55.5275 31.2409L100.374 73.3142L72.4942 102.834L49.5342 81.5142L53.6342 77.4142L72.4942 94.6342L92.9942 73.3142L51.9942 34.7742L56.0942 30.6742" stroke="currentColor" stroke-width="1.64"/>
+<path d="M55.2742 31.4942L59.3742 41.3342L69.2142 44.6142L73.3142 54.4542L83.1542 58.5542L87.2542 67.5742L98.7342 71.6742M96.2742 76.5942L92.9942 73.3142" stroke="currentColor" stroke-width="1.64"/>
+<path d="M89.7142 76.5942L86.4342 87.2542L74.9542 92.1742L72.4942 94.6342L76.5942 98.7342" stroke="currentColor" stroke-width="1.64"/>
+<path d="M70.8542 101.194L64.2942 87.2542L50.3542 82.3342" stroke="currentColor" stroke-width="1.64"/>
+</symbol>
+</svg>
+
+<div class="deck-viewport">
+<div class="progress" id="prog"></div>
+<main class="deck-stage" id="stage">
+
+<!-- ============ SLIDE 1 — CAPA ============ -->
+<section class="slide active">
+  <div class="cover">
+    <div class="left">
+      <div class="clock"><span class="ico"><svg><use href="#mesh"/></svg></span><span class="wm"><span class="s">STEEL</span> <span class="c">CONECTA</span></span></div>
+      <div class="kicker reveal" style="--d:.15s">Apresentação da Franquia</div>
+      <h1 class="reveal" style="--d:.3s">O problema<br>não é o mercado,<br>é o <span class="hl">método</span>.</h1>
+      <p class="csub reveal" style="--d:.45s">O sistema operacional de negócios da construção a seco.</p>
+      <div class="ctag reveal" style="--d:.6s">Ecossistema Fast · Steel Frame &amp; Drywall</div>
+    </div>
+    <div class="right">
+      <div class="rmesh"><svg><use href="#mesh"/></svg></div>
+      <div class="big pop" style="--d:.4s">360<span>°</span></div>
+      <div class="cap pop" style="--d:.55s">Método <b>Steel Conecta</b></div>
+      <div class="capsub pop" style="--d:.7s">Técnica · Gestão · Precificação · Operação</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SLIDE 2 — MERCADO ============ -->
+<section class="slide">
+  <div class="mesh-deco" style="right:-160px;top:-120px;width:720px;height:720px"><svg><use href="#mesh"/></svg></div>
+  <div class="top"><div class="lock"><span class="ico"><svg><use href="#mesh"/></svg></span><span class="wm"><span class="s">STEEL</span> CONECTA</span></div><div class="pg">MERCADO · <b>02</b>/15</div></div>
+  <div class="body">
+    <div class="kicker reveal">A oportunidade</div>
+    <h2 class="reveal" style="--d:.1s">A construção a seco é o sistema<br>que <span class="hl">mais cresce</span> no Brasil.</h2>
+    <div class="statgrid">
+      <div class="stat pop" style="--d:.2s"><div class="n">60<small>%</small></div><div class="l">Até 60% mais rápida<br>que a alvenaria</div></div>
+      <div class="stat pop" style="--d:.32s"><div class="n">~5<small>%</small></div><div class="l">de perda de material<br>(alvenaria: ~30%)</div></div>
+      <div class="stat pop" style="--d:.44s"><div class="n">13<small>kg/m²</small></div><div class="l">de entulho<br>(alvenaria: 450 kg/m²)</div></div>
+      <div class="stat pop" style="--d:.56s"><div class="n">+</div><div class="l">Demanda em alta e<br>mão de obra escassa</div></div>
+    </div>
+    <p class="lead reveal" style="--d:.7s;margin-top:56px">Mercado pedindo obra rápida, limpa e previsível. Ainda há possível ganho tributário como construção industrializada, <b>quando aplicável</b>.</p>
+  </div>
+  <div class="tick">Fonte: Maximize Market Research e dados do setor de construção a seco.</div>
+</section>
+
+<!-- ============ SLIDE 3 — GARGALOS ============ -->
+<section class="slide">
+  <div class="mesh-deco" style="left:-180px;bottom:-160px;width:560px;height:560px;color:var(--azul);opacity:.05"><svg><use href="#mesh"/></svg></div>
+  <div class="top"><div class="lock"><span class="ico"><svg><use href="#mesh"/></svg></span><span class="wm"><span class="s">STEEL</span> CONECTA</span></div><div class="pg">DIAGNÓSTICO · <b>03</b>/15</div></div>
+  <div class="body">
+    <div class="kicker reveal">O diagnóstico</div>
+    <h2 class="reveal" style="--d:.1s">Onde a sua margem <span class="hl">escorre</span> hoje.</h2>
+    <div class="problist">
+      <div class="row reveal" style="--d:.2s"><span class="x">!</span><p>Obra que <b>atrasa</b> e estoura o cronograma</p></div>
+      <div class="row reveal" style="--d:.3s"><span class="x">!</span><p><b>Retrabalho e desperdício</b> comendo o lucro</p></div>
+      <div class="row reveal" style="--d:.4s"><span class="x">!</span><p>Orçamento <b>no chute</b>, sem previsibilidade</p></div>
+      <div class="row reveal" style="--d:.5s"><span class="x">!</span><p>Material comprado <b>caro, no varejo</b></p></div>
+      <div class="row reveal" style="--d:.6s"><span class="x">!</span><p>Cliente que só vem por <b>indicação</b>, sem fluxo</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SLIDE 4 — TRANSIÇÃO (respeito) ============ -->
+<section class="slide dark">
+  <div class="mesh-deco" style="right:-140px;top:-100px;width:900px;height:900px"><svg><use href="#mesh"/></svg></div>
+  <div class="top"><div class="lock"><span class="ico"><svg><use href="#mesh"/></svg></span><span class="wm"><span class="s">STEEL</span> CONECTA</span></div><div class="pg">A VIRADA · <b>04</b>/15</div></div>
+  <div class="body" style="display:flex;flex-direction:column;justify-content:center">
+    <div class="kicker reveal">A real</div>
+    <h2 class="reveal" style="--d:.1s;font-size:96px">O que falta não é<br>competência. É <span class="hl">estrutura</span>.</h2>
+    <p class="lead reveal" style="--d:.3s;margin-top:36px;font-size:36px">Você sabe construir. O que trava o seu lucro é operar sozinho: sem poder de compra, sem fluxo de clientes e sem um método que se repete em toda obra.</p>
+  </div>
+</section>
+
+<!-- ============ SLIDE 5 — O QUE É ============ -->
+<section class="slide">
+  <div class="mesh-deco" style="right:-170px;bottom:-150px;width:640px;height:640px"><svg><use href="#mesh"/></svg></div>
+  <div class="top"><div class="lock"><span class="ico"><svg><use href="#mesh"/></svg></span><span class="wm"><span class="s">STEEL</span> CONECTA</span></div><div class="pg">A SOLUÇÃO · <b>05</b>/15</div></div>
+  <div class="body">
+    <div class="kicker reveal">O que é a Steel Conecta</div>
+    <h2 class="reveal" style="--d:.1s">O <span class="hl">sistema operacional</span> de negócios<br>da construção a seco.</h2>
+    <div class="cards c2" style="margin-top:56px">
+      <div class="card reveal" style="--d:.25s;border-left:6px solid var(--c-fast)">
+        <h3>Não é</h3>
+        <p>Não é um curso. Não é consultoria avulsa. Não é só um fornecedor de material que some depois da venda.</p>
+      </div>
+      <div class="card reveal" style="--d:.4s;border-left:6px solid var(--dourado)">
+        <h3>É</h3>
+        <p>Uma franquia que te pluga num ecossistema completo: método, tecnologia, logística de materiais e geração de demanda. Transforma executores em empresários.</p>
+      </div>
+    </div>
+    <p class="lead reveal" style="--d:.55s;margin-top:44px">Você foca na execução com rentabilidade. A estrutura por trás é do grupo.</p>
+  </div>
+</section>
+
+<!-- ============ SLIDE 6 — ECOSSISTEMA ============ -->
+<section class="slide">
+  <div class="top"><div class="lock"><span class="ico"><svg><use href="#mesh"/></svg></span><span class="wm"><span class="s">STEEL</span> CONECTA</span></div><div class="pg">ECOSSISTEMA · <b>06</b>/15</div></div>
+  <div class="body">
+    <div class="kicker reveal">A estrutura por trás</div>
+    <h2 class="reveal" style="--d:.1s;font-size:66px">Marca nova, com a força de<br>um grupo de <span class="hl">+25 anos</span>.</h2>
+    <div class="eco">
+      <div class="node n-tl pop" style="--d:.3s"><div class="h"><span class="dot" style="background:var(--c-nova)"></span><b>Nova Metálica</b></div><p>Indústria própria de aço leve normatizado.</p></div>
+      <div class="node n-tr pop" style="--d:.4s"><div class="h"><span class="dot" style="background:var(--c-homes)"></span><b>Fast Homes &amp; Obras</b></div><p>Engenharia, projetos e gestão de obras.</p></div>
+      <div class="node n-bl pop" style="--d:.5s"><div class="h"><span class="dot" style="background:var(--c-fast)"></span><b>Fast Sistemas</b></div><p>Materiais e logística. Mais de 1 milhão de m²/mês.</p></div>
+      <div class="node n-br pop" style="--d:.6s"><div class="h"><span class="dot" style="background:var(--c-unity)"></span><b>Unity Company</b></div><p>Marketing e geração de demanda qualificada.</p></div>
+      <div class="hub pop" style="--d:.2s"><span class="ico"><svg><use href="#mesh"/></svg></span><div class="t"><span class="s">STEEL</span> CONECTA</div><div class="d">Método · Gestão · Suporte</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SLIDE 7 — MÉTODO 360 + PILARES ============ -->
+<section class="slide">
+  <div class="mesh-deco" style="right:-160px;top:-120px;width:600px;height:600px"><svg><use href="#mesh"/></svg></div>
+  <div class="top"><div class="lock"><span class="ico"><svg><use href="#mesh"/></svg></span><span class="wm"><span class="s">STEEL</span> CONECTA</span></div><div class="pg">MÉTODO 360° · <b>07</b>/15</div></div>
+  <div class="body">
+    <div class="kicker reveal">O que muda a sua margem</div>
+    <h2 class="reveal" style="--d:.1s">Método <span class="hl">360°</span> em quatro pilares.</h2>
+    <div class="method reveal" style="--d:.2s">
+      <span class="m">Técnica</span><span class="plus">+</span><span class="m">Gestão</span><span class="plus">+</span><span class="m">Precificação</span><span class="plus">+</span><span class="m">Operação</span>
+    </div>
+    <div class="cards c4" style="margin-top:34px">
+      <div class="card pop" style="--d:.3s"><div class="chip" style="background:var(--c-unity)">1</div><h3>Demanda</h3><p>Leads qualificados e suporte de marketing pra parar de caçar cliente.</p></div>
+      <div class="card pop" style="--d:.42s"><div class="chip" style="background:var(--c-fast)">2</div><h3>Margem de indústria</h3><p>Material direto da fábrica, em condições especiais.</p></div>
+      <div class="card pop" style="--d:.54s"><div class="chip" style="background:var(--c-homes)">3</div><h3>Execução</h3><p>Academia Steel Conecta e mão de obra qualificada pra entregar com padrão.</p></div>
+      <div class="card pop" style="--d:.66s"><div class="chip" style="background:var(--dourado)">4</div><h3>Gestão</h3><p>Playbooks, propostas prontas e gestão administrativa do negócio.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SLIDE 8 — RECEITA RECORRENTE ============ -->
+<section class="slide dark">
+  <div class="mesh-deco" style="left:-150px;bottom:-160px;width:720px;height:720px"><svg><use href="#mesh"/></svg></div>
+  <div class="top"><div class="lock"><span class="ico"><svg><use href="#mesh"/></svg></span><span class="wm"><span class="s">STEEL</span> CONECTA</span></div><div class="pg">RECEITA · <b>08</b>/15</div></div>
+  <div class="body">
+    <div class="kicker reveal">Mais de uma fonte de receita</div>
+    <h2 class="reveal" style="--d:.1s">Você não depende <span class="hl">só da obra</span>.</h2>
+    <div class="cards c3" style="margin-top:56px">
+      <div class="card pop" style="--d:.24s"><h3>Projetos</h3><p>Receita pela elaboração e venda de projetos.</p></div>
+      <div class="card pop" style="--d:.32s"><h3>Consultorias</h3><p>Cobrança por análise técnica e orientação.</p></div>
+      <div class="card pop" style="--d:.4s"><h3>Gerenciamento</h3><p>Gestão de obras de terceiros como serviço.</p></div>
+      <div class="card pop" style="--d:.48s"><h3>Cashback</h3><p>Retorno sobre a compra de materiais no ecossistema.</p></div>
+      <div class="card pop" style="--d:.56s"><h3>Bonificações</h3><p>Prêmios por volume e desempenho na rede.</p></div>
+      <div class="card pop" style="--d:.64s"><h3>Indicações</h3><p>Ganho ao trazer novos negócios pra rede.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SLIDE 9 — RENTABILIDADE (CASE) ============ -->
+<section class="slide">
+  <div class="top"><div class="lock"><span class="ico"><svg><use href="#mesh"/></svg></span><span class="wm"><span class="s">STEEL</span> CONECTA</span></div><div class="pg">RENTABILIDADE · <b>09</b>/15</div></div>
+  <div class="body">
+    <div class="kicker reveal">Prova real, não promessa</div>
+    <h2 class="reveal" style="--d:.1s">Um caso <span class="hl">acessível e replicável</span>.</h2>
+    <div class="case">
+      <div class="panel pop" style="--d:.25s">
+        <div class="rmesh"><svg><use href="#mesh"/></svg></div>
+        <div class="tagc">Franqueado real · obra concluída</div>
+        <div class="line"><span class="k">Valor da obra</span><span class="v">R$ 98 mil</span></div>
+        <div class="line"><span class="k">Prazo de execução</span><span class="v">3 meses</span></div>
+        <div class="line"><span class="k">Margem bruta</span><span class="v gold">R$ 25 mil</span></div>
+      </div>
+      <div class="exp reveal" style="--d:.4s">
+        <div class="ekicker">Como ler esse número</div>
+        <p>A obra rende cerca de <b>25% de margem bruta</b>. Depois de toda a estrutura, o líquido do negócio fica na faixa de <b>6% a 10%</b>.</p>
+        <p class="big2">O resultado se constrói no <b>volume de obras</b> e na <b>receita recorrente</b>, não numa venda isolada.</p>
+      </div>
+    </div>
+  </div>
+  <div class="tick note">Caso real de franqueado. Resultados variam conforme gestão, região e mercado.</div>
+</section>
+
+<!-- ============ SLIDE 10 — CENÁRIOS DE FATURAMENTO ============ -->
+<section class="slide">
+  <div class="mesh-deco" style="right:-160px;bottom:-140px;width:600px;height:600px"><svg><use href="#mesh"/></svg></div>
+  <div class="top"><div class="lock"><span class="ico"><svg><use href="#mesh"/></svg></span><span class="wm"><span class="s">STEEL</span> CONECTA</span></div><div class="pg">CENÁRIOS · <b>10</b>/15</div></div>
+  <div class="body">
+    <div class="kicker reveal">Cenários de referência</div>
+    <h2 class="reveal" style="--d:.1s">Do conservador ao <span class="hl">ritmo saudável</span>.</h2>
+    <div class="cards c3" style="margin-top:56px">
+      <div class="card pop" style="--d:.25s"><div class="cnum">Conservador</div><h3>1 obra por mês</h3><p>Começo com pé no chão, aprendendo a operação e o método.</p></div>
+      <div class="card pop" style="--d:.4s;border:2px solid var(--dourado)"><div class="cnum">Realista</div><h3>2 obras simultâneas</h3><p>Capacidade padrão de um franqueado com equipe estruturada.</p></div>
+      <div class="card pop" style="--d:.55s"><div class="cnum">Patamar saudável</div><h3>~R$ 80 mil / mês</h3><p>Receita diluída no cronograma (~3 meses por obra), somando as obras ativas.</p></div>
+    </div>
+    <p class="lead reveal" style="--d:.7s;margin-top:44px">A obra não entra no caixa de uma vez: ela é medida ao longo da execução.</p>
+  </div>
+  <div class="tick note">Cenários de referência. Não constituem garantia de faturamento.</div>
+</section>
+
+<!-- ============ SLIDE 11 — INVESTIMENTO E RETORNO ============ -->
+<section class="slide dark">
+  <div class="mesh-deco" style="right:-150px;top:-120px;width:820px;height:820px"><svg><use href="#mesh"/></svg></div>
+  <div class="top"><div class="lock"><span class="ico"><svg><use href="#mesh"/></svg></span><span class="wm"><span class="s">STEEL</span> CONECTA</span></div><div class="pg">INVESTIMENTO · <b>11</b>/15</div></div>
+  <div class="body">
+    <div class="kicker reveal">Quanto custa entrar</div>
+    <h2 class="reveal" style="--d:.1s">Entrada enxuta,<br><span class="hl">1 ano sem taxas</span>.</h2>
+    <div class="statgrid" style="grid-template-columns:repeat(3,1fr);margin-top:52px">
+      <div class="stat pop" style="--d:.25s"><div class="n">R$30<small>mil</small></div><div class="l">Investimento de entrada<br>(pago uma vez)</div></div>
+      <div class="stat pop" style="--d:.4s"><div class="n">12<small>meses</small></div><div class="l">de isenção total de taxas<br>(condição por tempo limitado)</div></div>
+      <div class="stat pop" style="--d:.55s"><div class="n">~6<small>meses</small></div><div class="l">foi o retorno no case real<br>(resultados variam)</div></div>
+    </div>
+    <p class="lead reveal" style="--d:.7s;margin-top:52px">Além da entrada, há o capital de giro, que varia conforme a sua região. Suporte completo e indicação de obras já entram inclusos.</p>
+  </div>
+</section>
+
+<!-- ============ SLIDE 12 — PIONEIRISMO ============ -->
+<section class="slide">
+  <div class="mesh-deco" style="left:-160px;top:-120px;width:760px;height:760px;color:var(--dourado);opacity:.10"><svg><use href="#mesh"/></svg></div>
+  <div class="top"><div class="lock"><span class="ico"><svg><use href="#mesh"/></svg></span><span class="wm"><span class="s">STEEL</span> CONECTA</span></div><div class="pg">PIONEIRISMO · <b>12</b>/15</div></div>
+  <div class="body" style="display:flex;flex-direction:column;justify-content:center">
+    <div class="kicker reveal">O momento</div>
+    <h2 class="reveal" style="--d:.1s;font-size:92px">Quem chega primeiro<br><span class="hl">constrói a referência</span>.</h2>
+    <p class="lead reveal" style="--d:.3s;margin-top:34px;font-size:36px">O mercado de construção a seco ainda está no início na maioria das regiões. Ser o primeiro nome lembrado, com método e estrutura, é uma vantagem que não se recupera depois. E você começa com um ano inteiro sem taxas.</p>
+  </div>
+</section>
+
+<!-- ============ SLIDE 13 — COMO INICIAR ============ -->
+<section class="slide">
+  <div class="mesh-deco" style="right:-160px;bottom:-150px;width:600px;height:600px"><svg><use href="#mesh"/></svg></div>
+  <div class="top"><div class="lock"><span class="ico"><svg><use href="#mesh"/></svg></span><span class="wm"><span class="s">STEEL</span> CONECTA</span></div><div class="pg">OPERAÇÃO · <b>13</b>/15</div></div>
+  <div class="body">
+    <div class="kicker reveal">Como iniciar a operação</div>
+    <h2 class="reveal" style="--d:.1s">O que você precisa pra <span class="hl">começar</span>.</h2>
+    <div class="steps">
+      <div class="step pop" style="--d:.25s"><div class="sn">1</div><h3>Responsável técnico</h3><p>Um engenheiro próprio como responsável técnico da operação.</p></div>
+      <div class="step pop" style="--d:.4s"><div class="sn">2</div><h3>Equipe mínima</h3><p>1 gestor técnico, 2 profissionais e 2 colaboradores pra tocar as obras.</p></div>
+      <div class="step pop" style="--d:.55s"><div class="sn">3</div><h3>Suporte incluso</h3><p>Treinamento, método e indicação de obras desde o primeiro dia.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SLIDE 14 — PRÓXIMO PASSO (CTA) ============ -->
+<section class="slide">
+  <div class="mesh-deco" style="left:-160px;top:-120px;width:600px;height:600px;color:var(--azul);opacity:.05"><svg><use href="#mesh"/></svg></div>
+  <div class="top"><div class="lock"><span class="ico"><svg><use href="#mesh"/></svg></span><span class="wm"><span class="s">STEEL</span> CONECTA</span></div><div class="pg">PRÓXIMO PASSO · <b>14</b>/15</div></div>
+  <div class="body">
+    <div class="kicker reveal">O próximo passo</div>
+    <h2 class="reveal" style="--d:.1s">Três passos pra <span class="hl">virar franqueado</span>.</h2>
+    <div class="steps">
+      <div class="step pop" style="--d:.25s"><div class="sn">1</div><h3>Reserva</h3><p>Você garante a sua condição de pioneiro na região.</p></div>
+      <div class="step pop" style="--d:.4s"><div class="sn">2</div><h3>Onboarding</h3><p>Treinamento, método e montagem da operação com suporte.</p></div>
+      <div class="step pop" style="--d:.55s"><div class="sn">3</div><h3>Primeiras obras</h3><p>Você executa com indicação de obras e o time ao seu lado.</p></div>
+    </div>
+    <div class="ctaband reveal" style="--d:.7s">
+      <div class="rmesh"><svg><use href="#mesh"/></svg></div>
+      <div class="txt"><h3>Reserve a sua condição de <span class="hl">pioneiro</span>.</h3><p>Vagas com 1 ano de isenção total de taxas.</p></div>
+      <div class="btn">Quero reservar</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SLIDE 15 — CONTATO ============ -->
+<section class="slide dark">
+  <div class="mesh-deco" style="right:-150px;top:-120px;width:900px;height:900px"><svg><use href="#mesh"/></svg></div>
+  <div class="top"><div class="lock"><span class="ico"><svg><use href="#mesh"/></svg></span><span class="wm"><span class="s">STEEL</span> CONECTA</span></div><div class="pg">CONTATO · <b>15</b>/15</div></div>
+  <div class="body">
+    <div class="kicker reveal">Vamos construir isso juntos</div>
+    <h2 class="reveal" style="--d:.1s">Fale com o nosso time.</h2>
+    <div class="contact">
+      <div class="ci reveal" style="--d:.28s"><span class="ib">◈</span><span><span class="cl">Site</span><br><span class="cv">steelconecta.com.br</span></span></div>
+      <div class="ci reveal" style="--d:.38s"><span class="ib">@</span><span><span class="cl">Instagram</span><br><span class="cv">@steelconnecta</span></span></div>
+      <div class="ci reveal" style="--d:.48s"><span class="ib">✉</span><span><span class="cl">E-mail</span><br><span class="cv">contato@steelconecta.com.br</span></span></div>
+      <div class="ci reveal" style="--d:.58s"><span class="ib">☎</span><span><span class="cl">WhatsApp</span><br><span class="cv">+55 21 97252-3527</span></span></div>
+    </div>
+  </div>
+  <div class="disclaimer reveal" style="--d:.7s">Os resultados apresentados referem-se a casos reais e não representam garantia de rentabilidade. O desempenho varia conforme gestão, região e condições de mercado. Condições comerciais sujeitas a alteração; detalhes formais constam na Circular de Oferta de Franquia (COF) e no contrato.</div>
+</section>
+
+</main>
+</div>
+
+<!-- navegação -->
+<div class="nav">
+  <button id="prev" aria-label="Anterior">‹</button>
+  <button id="next" aria-label="Próximo">›</button>
+</div>
+<div class="edit-hotzone"></div>
+<button class="edit-toggle" id="editToggle" title="Modo edição (E)">✏️</button>
+
+<script>
+/* ===========================================
+   CONTROLADOR DA APRESENTAÇÃO
+   =========================================== */
+class Deck{
+  constructor(){
+    this.slides=[...document.querySelectorAll('.slide')];
+    this.i=0;
+    this.stage=document.getElementById('stage');
+    this.prog=document.getElementById('prog');
+    this.fit();addEventListener('resize',()=>this.fit());
+    this.keys();this.touch();this.wheel();
+    document.getElementById('next').onclick=()=>this.go(this.i+1);
+    document.getElementById('prev').onclick=()=>this.go(this.i-1);
+    this.show(0);
+  }
+  fit(){const f=Math.min(innerWidth/1920,innerHeight/1080);
+    this.stage.style.transform=`translate(${(innerWidth-1920*f)/2}px,${(innerHeight-1080*f)/2}px) scale(${f})`}
+  show(n){this.i=Math.max(0,Math.min(n,this.slides.length-1));
+    this.slides.forEach((s,k)=>{s.classList.toggle('active',k===this.i);s.classList.toggle('visible',k===this.i)});
+    this.prog.style.width=((this.i+1)/this.slides.length*100)+'%'}
+  go(n){this.show(n)}
+  keys(){addEventListener('keydown',e=>{
+    if(e.target.getAttribute('contenteditable'))return;
+    if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();this.go(this.i+1)}
+    if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();this.go(this.i-1)}
+    if(e.key==='Home')this.go(0);if(e.key==='End')this.go(this.slides.length-1)})}
+  touch(){let x=0;addEventListener('touchstart',e=>x=e.touches[0].clientX,{passive:true});
+    addEventListener('touchend',e=>{const d=e.changedTouches[0].clientX-x;
+      if(Math.abs(d)>60)this.go(this.i+(d<0?1:-1))},{passive:true})}
+  wheel(){let t=0;addEventListener('wheel',e=>{const n=Date.now();if(n-t<700)return;
+    if(Math.abs(e.deltaY)>30){t=n;this.go(this.i+(e.deltaY>0?1:-1))}},{passive:true})}
+}
+const deck=new Deck();
+
+/* ===========================================
+   MODO EDIÇÃO INLINE (hover canto sup. esq. ou tecla E)
+   =========================================== */
+const editor={
+  isActive:false,
+  toggle(){
+    this.isActive=!this.isActive;
+    const b=document.getElementById('editToggle');
+    b.classList.toggle('active',this.isActive);
+    document.querySelectorAll('h1,h2,h3,p,.cv,.l,.n,.cnum,.kicker,.csub,.cap,.big').forEach(el=>{
+      el.setAttribute('contenteditable',this.isActive)});
+    if(!this.isActive){try{localStorage.setItem('steelconecta-deck',document.querySelector('.deck-stage').innerHTML)}catch(e){}}
+  }
+};
+document.getElementById('editToggle').addEventListener('click',()=>editor.toggle());
+const hz=document.querySelector('.edit-hotzone'),et=document.getElementById('editToggle');let ht=null;
+hz.addEventListener('mouseenter',()=>{clearTimeout(ht);et.classList.add('show')});
+hz.addEventListener('mouseleave',()=>{ht=setTimeout(()=>{if(!editor.isActive)et.classList.remove('show')},400)});
+et.addEventListener('mouseenter',()=>clearTimeout(ht));
+et.addEventListener('mouseleave',()=>{ht=setTimeout(()=>{if(!editor.isActive)et.classList.remove('show')},400)});
+hz.addEventListener('click',()=>editor.toggle());
+addEventListener('keydown',e=>{if((e.key==='e'||e.key==='E')&&!e.target.getAttribute('contenteditable'))editor.toggle()});
+</script>
+</body>
+</html>
