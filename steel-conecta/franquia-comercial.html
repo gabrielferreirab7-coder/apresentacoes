@@ -149,26 +149,35 @@ h2 .hl{color:var(--dourado)}
 .stat .l{margin-top:14px;font-size:24px;font-weight:600;color:var(--azul-esc);line-height:1.25}
 .slide.dark .stat .l{color:#cfe0ee}
 
-/* ===== ecossistema (slide 6) ===== */
-.eco{position:relative;width:100%;height:640px;margin-top:20px}
-.eco .hub{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:300px;height:300px;border-radius:50%;
+/* ===== ecossistema (slide 6) — hub conectado ===== */
+.eco{position:relative;width:1400px;height:470px;margin:26px auto 0}
+.eco .wires{position:absolute;inset:0;width:100%;height:100%;z-index:1;pointer-events:none;opacity:0;transition:opacity 1s .5s ease}
+.slide.active .eco .wires{opacity:1}
+.eco .wires path.link{fill:none;stroke:var(--azul-claro);stroke-width:2.5;stroke-dasharray:9 9;opacity:.6}
+.slide.active .eco .wires path.link{animation:flow 20s linear infinite}
+@keyframes flow{to{stroke-dashoffset:-180}}
+.eco .hub{position:absolute;left:50%;top:50%;width:300px;height:300px;border-radius:50%;
   background:radial-gradient(circle,#1d537c,#143A57);color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;
-  box-shadow:0 26px 60px -20px rgba(20,58,87,.7);z-index:3;border:3px solid var(--dourado)}
-.eco .hub .ico{width:76px;height:76px;color:var(--dourado);margin-bottom:12px}
+  box-shadow:0 26px 60px -20px rgba(20,58,87,.7);z-index:3;border:3px solid var(--dourado);
+  opacity:0;transform:translate(-50%,-50%) scale(.9);
+  transition:opacity .8s var(--ease) var(--d,0s),transform .8s var(--ease) var(--d,0s)}
+.slide.active .eco .hub{opacity:1;transform:translate(-50%,-50%) scale(1)}
+.eco .hub .ico{width:72px;height:72px;color:var(--dourado);margin-bottom:10px}
 .eco .hub .t{font-weight:800;font-size:26px;letter-spacing:.02em}
 .eco .hub .t .s{color:var(--dourado)}
-.eco .hub .d{font-size:16px;color:#c6d3de;margin-top:6px}
-.eco .node{position:absolute;width:340px;padding:26px 28px;background:#fff;border-radius:18px;border:1.5px solid rgba(20,58,87,.12);
+.eco .hub .d{font-size:16px;color:var(--dourado);margin-top:8px;font-weight:700;letter-spacing:.06em}
+.eco .node{position:absolute;width:340px;padding:22px 26px;background:#fff;border-radius:18px;border:1.5px solid rgba(20,58,87,.12);border-top:5px solid var(--nc,var(--azul));
   box-shadow:0 18px 44px -26px rgba(20,58,87,.5);z-index:2}
-.eco .node .h{display:flex;align-items:center;gap:14px;margin-bottom:10px}
-.eco .node .dot{width:20px;height:20px;border-radius:6px;flex:none}
-.eco .node .h b{font-size:24px;font-weight:800;color:var(--azul-esc)}
-.eco .node p{font-size:19px;line-height:1.32;color:var(--texto)}
-.eco .n-tl{left:70px;top:24px}
-.eco .n-tr{right:70px;top:24px}
-.eco .n-bl{left:70px;bottom:24px}
-.eco .n-br{right:70px;bottom:24px}
-.eco .n-bc{left:50%;bottom:-8px;transform:translateX(-50%)}
+.eco .node .h{display:flex;align-items:center;gap:12px;margin-bottom:8px}
+.eco .node .dot{width:16px;height:16px;border-radius:5px;flex:none}
+.eco .node .h b{font-size:23px;font-weight:800;color:var(--azul-esc)}
+.eco .node p{font-size:19px;line-height:1.3;color:var(--texto)}
+.eco .n-tl{left:0;top:0}
+.eco .n-tr{right:0;top:0}
+.eco .n-bl{left:0;bottom:0}
+.eco .n-br{right:0;bottom:0}
+.econote{text-align:center;margin-top:22px;font-size:25px;font-weight:500;color:var(--azul)}
+.econote b{color:var(--dourado-esc);font-weight:700}
 
 /* pilares 360 (slide 7) */
 .method{display:flex;align-items:center;gap:18px;margin-top:40px;margin-bottom:8px;flex-wrap:wrap}
@@ -352,12 +361,20 @@ h2 .hl{color:var(--dourado)}
     <div class="kicker reveal">A estrutura por trás</div>
     <h2 class="reveal" style="--d:.1s;font-size:66px">Marca nova, com a força de<br>um grupo de <span class="hl">+25 anos</span>.</h2>
     <div class="eco">
-      <div class="node n-tl pop" style="--d:.3s"><div class="h"><span class="dot" style="background:var(--c-nova)"></span><b>Nova Metálica</b></div><p>Indústria própria de aço leve normatizado.</p></div>
-      <div class="node n-tr pop" style="--d:.4s"><div class="h"><span class="dot" style="background:var(--c-homes)"></span><b>Fast Homes &amp; Obras</b></div><p>Engenharia, projetos e gestão de obras.</p></div>
-      <div class="node n-bl pop" style="--d:.5s"><div class="h"><span class="dot" style="background:var(--c-fast)"></span><b>Fast Sistemas</b></div><p>Materiais e logística. Mais de 1 milhão de m²/mês.</p></div>
-      <div class="node n-br pop" style="--d:.6s"><div class="h"><span class="dot" style="background:var(--c-unity)"></span><b>Unity Company</b></div><p>Marketing e geração de demanda qualificada.</p></div>
-      <div class="hub pop" style="--d:.2s"><span class="ico"><svg><use href="#mesh"/></svg></span><div class="t"><span class="s">STEEL</span> CONECTA</div><div class="d">Método · Gestão · Suporte</div></div>
+      <svg class="wires" viewBox="0 0 1400 470" aria-hidden="true">
+        <defs><marker id="ah" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0 0 L8 4.5 L0 9 z" fill="#668CAD"/></marker></defs>
+        <path class="link" d="M180 62 L548 175" marker-end="url(#ah)"/>
+        <path class="link" d="M1220 62 L852 175" marker-end="url(#ah)"/>
+        <path class="link" d="M180 408 L548 295" marker-end="url(#ah)"/>
+        <path class="link" d="M1220 408 L852 295" marker-end="url(#ah)"/>
+      </svg>
+      <div class="node n-tl pop" style="--d:.3s;--nc:var(--c-nova)"><div class="h"><span class="dot" style="background:var(--c-nova)"></span><b>Nova Metálica</b></div><p>Aço leve de indústria própria, sempre disponível.</p></div>
+      <div class="node n-tr pop" style="--d:.4s;--nc:var(--c-homes)"><div class="h"><span class="dot" style="background:var(--c-homes)"></span><b>Fast Homes &amp; Obras</b></div><p>Engenharia e projetos que dão respaldo à sua obra.</p></div>
+      <div class="node n-bl pop" style="--d:.5s;--nc:var(--c-fast)"><div class="h"><span class="dot" style="background:var(--c-fast)"></span><b>Fast Sistemas</b></div><p>Material com preço de fábrica. +1 milhão de m²/mês.</p></div>
+      <div class="node n-br pop" style="--d:.6s;--nc:var(--c-unity)"><div class="h"><span class="dot" style="background:var(--c-unity)"></span><b>Unity Company</b></div><p>Leads e marketing pra você não caçar cliente.</p></div>
+      <div class="hub" style="--d:.2s"><span class="ico"><svg><use href="#mesh"/></svg></span><div class="t"><span class="s">STEEL</span> CONECTA</div><div class="d">VOCÊ SE PLUGA AQUI</div></div>
     </div>
+    <p class="econote reveal" style="--d:.85s">Você se conecta a <b>um único ponto</b> e ativa todo o grupo por trás da sua operação.</p>
   </div>
 </section>
 
