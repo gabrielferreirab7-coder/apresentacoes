@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Proposta de sociedade — gestora de obras, Rio de Janeiro</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap">
+<style>
+/* ===========================================
+   DESIGN TOKENS
+   Dark petrol "Rio ao entardecer" canvas (Mat's tactile-glow mechanics
+   recolored with the Costa palette: petrol/teal + brass + stone paper).
+   Change these to change the whole deck.
+   =========================================== */
+:root{
+  --bg-dark:#132B29;
+  --bg-dark-alt:#1B3A37;
+  --ink-cream:#F1EADA;
+  --text-soft:#B7C4BF;
+  --text-faint:#7C8D88;
+  --brass:#C9A063;
+  --glow:#2C8C86;
+  --stone:#EFE9DE;
+  --stone-ink:#1B2E2C;
+  --stone-soft:#6B6455;
+  --petrol-deep:#12403E;
+  --line:rgba(241,234,218,0.14);
+  --line-stone:rgba(19,43,42,0.14);
+
+  --f-display:'Bricolage Grotesque',sans-serif;
+  --f-sans:'DM Sans',sans-serif;
+  --f-mono:'DM Mono',monospace;
+
+  --ease-out-expo:cubic-bezier(0.16,1,0.3,1);
+  --dur:0.7s;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+
+/* ===========================================
+   FIXED 16:9 STAGE — MANDATORY BASE (viewport-base.css, included in full)
+   =========================================== */
+html,body{width:100%;height:100%;margin:0;overflow:hidden;background:var(--stage-bg,#000);}
+.deck-viewport{position:fixed;inset:0;overflow:hidden;background:var(--stage-bg,#000);}
+.deck-stage{position:absolute;left:0;top:0;width:1920px;height:1080px;overflow:hidden;transform-origin:0 0;background:var(--slide-bg,#fff);}
+.slide{position:absolute;inset:0;width:1920px;height:1080px;overflow:hidden;display:block;visibility:hidden;opacity:0;pointer-events:none;background:var(--slide-bg,#fff);}
+.slide.active,.slide.visible{visibility:visible;opacity:1;pointer-events:auto;z-index:1;}
+img,video,canvas,svg{max-width:100%;max-height:100%;}
+.deck-controls{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);z-index:1000;}
+@media print{
+  html,body{width:1920px;height:auto;overflow:visible;background:#fff;}
+  .deck-viewport{position:static;overflow:visible;background:#fff;}
+  .deck-stage{position:static;width:auto;height:auto;transform:none!important;background:none;}
+  .slide{position:relative;display:block!important;visibility:visible!important;opacity:1!important;pointer-events:auto!important;width:1920px;height:1080px;break-after:page;page-break-after:always;}
+  .slide:last-child{break-after:auto;page-break-after:auto;}
+  .deck-controls{display:none!important;}
+}
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation-duration:0.01ms!important;transition-duration:0.2s!important;}
+}
+
+/* ===========================================
+   SLIDE BASE
+   =========================================== */
+.slide{background:var(--bg-dark);font-family:var(--f-sans);}
+.content{height:100%;display:flex;flex-direction:column;justify-content:center;padding:0 160px;position:relative;z-index:2;}
+
+/* Kicker / label row, shared across every content slide */
+.kicker{font-family:var(--f-mono);font-size:17px;font-weight:500;letter-spacing:0.2em;text-transform:uppercase;color:var(--brass);display:flex;align-items:center;gap:14px;margin-bottom:34px;}
+.kicker .dot{color:var(--brass);font-size:11px;}
+
+h1,h2,h3{font-family:var(--f-display);color:var(--ink-cream);letter-spacing:-0.015em;font-weight:700;}
+h1{font-size:108px;line-height:1.05;max-width:1240px;}
+h2{font-size:74px;line-height:1.1;max-width:1320px;}
+h2.big{font-size:88px;line-height:1.08;max-width:1360px;}
+.mark{color:var(--brass);}
+p{font-family:var(--f-sans);color:var(--text-soft);}
+.lede{font-size:27px;line-height:1.6;max-width:900px;margin-top:36px;}
+
+/* ===========================================
+   DIVIDER SLIDES (title / problem / solution / closing):
+   glow-lit petrol canvas + abstracted coastline signature motif
+   =========================================== */
+.slide--divider .content{background:
+    radial-gradient(ellipse 1300px 620px at 82% 96%, rgba(44,140,134,0.35) 0%, rgba(44,140,134,0.12) 40%, transparent 72%);
+}
+.skyline{position:absolute;left:0;right:0;bottom:0;height:260px;pointer-events:none;z-index:1;}
+
+/* ===========================================
+   REVEAL ANIMATION
+   =========================================== */
+.reveal{opacity:0;transform:translateY(28px);transition:opacity var(--dur) var(--ease-out-expo),transform var(--dur) var(--ease-out-expo);}
+.slide.visible .reveal{opacity:1;transform:translateY(0);}
+.slide.visible .r1{transition-delay:0.05s;} .slide.visible .r2{transition-delay:0.16s;}
+.slide.visible .r3{transition-delay:0.27s;} .slide.visible .r4{transition-delay:0.38s;}
+.slide.visible .r5{transition-delay:0.49s;} .slide.visible .r6{transition-delay:0.6s;}
+
+/* ===========================================
+   COMPONENTS
+   =========================================== */
+
+/* Pain / statement list — short dash-led lines, no paragraphs */
+.line-list{margin-top:44px;display:flex;flex-direction:column;gap:22px;}
+.line-list li{list-style:none;font-family:var(--f-sans);font-size:29px;color:var(--ink-cream);display:flex;gap:22px;align-items:baseline;}
+.line-list li::before{content:'—';color:var(--brass);}
+
+/* Stone info-card — the one material break from the dark canvas, reserved for data */
+.card-stone{background:var(--stone);color:var(--stone-ink);border-radius:6px;padding:64px 72px;}
+
+/* Stat trio inside a stone card */
+.stat-grid{display:flex;gap:72px;}
+.stat{flex:1;}
+.stat .num{font-family:var(--f-display);font-weight:800;font-size:82px;color:var(--petrol-deep);font-variant-numeric:tabular-nums;line-height:1;letter-spacing:-0.02em;}
+.stat .lbl{font-family:var(--f-sans);font-size:20px;color:var(--stone-soft);margin-top:16px;line-height:1.5;max-width:340px;}
+
+/* Model / case list */
+.case-list{margin-top:46px;display:flex;flex-direction:column;gap:30px;}
+.case-item{display:flex;gap:36px;align-items:baseline;border-bottom:1px solid var(--line);padding-bottom:26px;}
+.case-item:last-child{border-bottom:none;}
+.case-name{font-family:var(--f-display);font-weight:700;font-size:30px;color:var(--ink-cream);min-width:430px;}
+.case-line{font-family:var(--f-sans);font-size:22px;color:var(--text-soft);}
+
+/* Compare card, two columns split by hairline */
+.compare{display:grid;grid-template-columns:1fr 1px 1fr;gap:56px;margin-top:8px;}
+.compare .div{background:var(--line-stone);}
+.compare h4{font-family:var(--f-mono);font-size:16px;letter-spacing:0.14em;text-transform:uppercase;margin-bottom:20px;}
+.compare .no h4{color:var(--stone-soft);}
+.compare .yes h4{color:var(--petrol-deep);}
+.compare p{font-family:var(--f-sans);font-size:22px;line-height:1.55;color:var(--stone-ink);}
+.compare .yes p{font-weight:500;}
+
+/* Three short phase labels in a row */
+.trio{display:flex;gap:56px;margin-top:48px;}
+.trio .item{flex:1;border-left:2px solid var(--brass);padding-left:26px;}
+.trio .item h4{font-family:var(--f-display);font-weight:700;font-size:30px;color:var(--ink-cream);margin-bottom:10px;}
+.trio .item p{font-size:20px;color:var(--text-soft);line-height:1.5;}
+
+/* Bullets (offer / scope) */
+.bullets{margin-top:44px;display:flex;flex-direction:column;gap:24px;max-width:1180px;}
+.bullets li{list-style:none;font-size:27px;color:var(--ink-cream);display:flex;gap:20px;}
+.bullets li::before{content:'—';color:var(--brass);flex-shrink:0;}
+.bullets li span{color:var(--text-soft);}
+.bullets li b{color:var(--ink-cream);font-weight:600;}
+
+/* Channel cards row */
+.channels{display:flex;gap:48px;margin-top:48px;}
+.channel{flex:1;}
+.channel .n{font-family:var(--f-mono);color:var(--brass);font-size:16px;letter-spacing:0.1em;margin-bottom:14px;}
+.channel h4{font-family:var(--f-display);font-weight:700;font-size:27px;color:var(--ink-cream);margin-bottom:12px;line-height:1.3;}
+.channel p{font-size:19px;color:var(--text-soft);line-height:1.5;}
+
+/* Roles split */
+.roles{display:grid;grid-template-columns:1fr 1px 1fr;gap:80px;margin-top:20px;}
+.roles .div{background:var(--line);}
+.roles .role h3{font-family:var(--f-mono);font-size:18px;letter-spacing:0.16em;text-transform:uppercase;color:var(--brass);margin-bottom:24px;}
+.roles .role ul{display:flex;flex-direction:column;gap:16px;}
+.roles .role li{list-style:none;font-size:24px;color:var(--ink-cream);}
+.roles .role li span{display:block;font-size:17px;color:var(--text-faint);margin-top:2px;}
+
+/* Math block */
+.math{display:flex;align-items:center;gap:40px;margin-top:56px;flex-wrap:wrap;}
+.math .term{text-align:left;}
+.math .term .v{font-family:var(--f-display);font-weight:800;font-size:60px;color:var(--petrol-deep);font-variant-numeric:tabular-nums;}
+.math .term .l{font-family:var(--f-sans);font-size:17px;color:var(--stone-soft);margin-top:8px;}
+.math .op{font-family:var(--f-display);font-size:44px;color:var(--stone-soft);}
+.math .result .v{color:var(--petrol-deep);font-size:72px;}
+.caption{font-family:var(--f-sans);font-size:17px;color:var(--stone-soft);margin-top:40px;font-style:italic;}
+.caption--dark{color:var(--text-faint);}
+
+/* Potential trio (dark canvas version) */
+.potential{display:flex;gap:56px;margin-top:50px;}
+.pcard{flex:1;border-top:2px solid var(--brass);padding-top:24px;}
+.pcard .phase{font-family:var(--f-mono);font-size:15px;letter-spacing:0.12em;text-transform:uppercase;color:var(--brass);margin-bottom:18px;}
+.pcard .val{font-family:var(--f-display);font-weight:800;font-size:52px;color:var(--ink-cream);line-height:1.05;}
+.pcard .sub{font-size:18px;color:var(--text-soft);margin-top:12px;line-height:1.5;}
+
+/* Plan duo */
+.plan-duo{display:flex;gap:64px;margin-top:44px;}
+.pplan{flex:1;border-left:3px solid var(--brass);padding-left:32px;}
+.pplan h4{font-family:var(--f-display);font-weight:700;font-size:32px;color:var(--ink-cream);margin-bottom:20px;}
+.pplan ul{display:flex;flex-direction:column;gap:14px;margin-bottom:24px;}
+.pplan li{list-style:none;font-size:21px;color:var(--text-soft);display:flex;gap:14px;}
+.pplan li::before{content:'—';color:var(--text-faint);}
+.pplan .crit{font-size:17px;color:var(--brass);line-height:1.5;}
+.pplan .crit b{font-weight:600;}
+
+/* Risk rows */
+.risks{margin-top:40px;display:flex;flex-direction:column;}
+.risk-row{display:grid;grid-template-columns:1fr 60px 1fr;align-items:center;gap:20px;padding:24px 0;border-bottom:1px solid var(--line);}
+.risk-row:first-child{border-top:1px solid var(--line);}
+.risk-row .risk{font-size:22px;color:var(--text-soft);}
+.risk-row .arrow{color:var(--brass);font-family:var(--f-display);font-size:24px;text-align:center;}
+.risk-row .fix{font-size:22px;color:var(--ink-cream);font-weight:500;}
+
+/* Steps (real sequence — numbering earns its place here) */
+.steps{display:flex;gap:64px;margin-top:52px;}
+.step{flex:1;}
+.step .no{font-family:var(--f-display);font-weight:800;font-size:64px;color:var(--brass);line-height:1;margin-bottom:20px;}
+.step p{font-size:23px;color:var(--ink-cream);line-height:1.5;}
+
+/* ===========================================
+   DECK CONTROLS (outside the slide design system)
+   =========================================== */
+.deck-controls{display:flex;align-items:center;gap:18px;background:rgba(19,43,41,0.85);backdrop-filter:blur(6px);border:1px solid var(--line);border-radius:999px;padding:10px 18px;}
+.nav-btn{width:34px;height:34px;border-radius:50%;border:1px solid var(--line);background:transparent;color:var(--ink-cream);font-family:var(--f-sans);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background 0.2s;}
+.nav-btn:hover{background:rgba(241,234,218,0.1);}
+.page-ind{font-family:var(--f-mono);font-size:14px;letter-spacing:0.08em;color:var(--text-soft);min-width:64px;text-align:center;}
+
+/* ===========================================
+   INLINE EDITING (default affordance)
+   =========================================== */
+.edit-hotzone{position:fixed;top:0;left:0;width:80px;height:80px;z-index:10000;cursor:pointer;}
+.edit-toggle{position:fixed;top:16px;left:16px;z-index:10001;width:40px;height:40px;border-radius:50%;border:1px solid var(--line);background:rgba(19,43,41,0.9);color:var(--ink-cream);font-size:16px;cursor:pointer;opacity:0;pointer-events:none;transition:opacity 0.3s ease;display:flex;align-items:center;justify-content:center;}
+.edit-toggle.show,.edit-toggle.active{opacity:1;pointer-events:auto;}
+.edit-toggle.active{background:var(--brass);color:var(--stone-ink);}
+[contenteditable="true"]{outline:1px dashed rgba(201,160,99,0.6);outline-offset:4px;cursor:text;}
+.toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:var(--brass);color:var(--stone-ink);font-family:var(--f-sans);font-size:14px;font-weight:600;padding:10px 20px;border-radius:6px;opacity:0;pointer-events:none;transition:opacity 0.3s;z-index:10002;}
+.toast.show{opacity:1;}
+</style>
+</head>
+<body>
+<div class="deck-viewport">
+<main class="deck-stage" id="deckStage">
+
+<!-- ============ 1. CAPA ============ -->
+<section class="slide active slide--divider">
+  <svg class="skyline" viewBox="0 0 1920 260" preserveAspectRatio="none">
+    <polyline points="0,260 0,190 220,90 420,180 640,60 860,180 1120,110 1400,200 1620,80 1920,180 1920,260" fill="none" stroke="#2C8C86" stroke-width="2" opacity="0.55"/>
+    <polyline points="0,260 0,220 260,150 500,215 760,140 1040,220 1320,170 1600,230 1920,205 1920,260" fill="none" stroke="#C9A063" stroke-width="1.5" opacity="0.4"/>
+  </svg>
+  <div class="content">
+    <div class="kicker reveal r1"><span class="dot">●</span> Proposta de sociedade — Rio de Janeiro</div>
+    <h1 class="reveal r2 editable">Um responsável.<br>Zero <span class="mark">surpresa</span>.</h1>
+    <p class="lede reveal r3 editable">Gestão de obras de alto padrão pra Zona Sul — o negócio, o plano e o motivo de eu ter te chamado.</p>
+  </div>
+</section>
+
+<!-- ============ 2. O PROBLEMA ============ -->
+<section class="slide slide--divider">
+  <svg class="skyline" viewBox="0 0 1920 260" preserveAspectRatio="none">
+    <polyline points="0,260 0,190 220,90 420,180 640,60 860,180 1120,110 1400,200 1620,80 1920,180 1920,260" fill="none" stroke="#2C8C86" stroke-width="2" opacity="0.4"/>
+  </svg>
+  <div class="content">
+    <div class="kicker reveal r1"><span class="dot">●</span> O problema</div>
+    <h2 class="big reveal r2 editable">Quem reforma um apê de R$ 3 a 8 milhões não quer virar gerente de obra da própria casa.</h2>
+    <ul class="line-list">
+      <li class="reveal r3 editable">Fala com seis fornecedores diferentes, e nenhum responde pelo outro</li>
+      <li class="reveal r4 editable">Não sabe se o orçamento vai estourar até estourar</li>
+      <li class="reveal r5 editable">Não tem ninguém do lado dele — só gente vendendo a própria execução</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============ 3. O MERCADO ============ -->
+<section class="slide">
+  <div class="content">
+    <div class="kicker reveal r1"><span class="dot">●</span> O mercado</div>
+    <h2 class="reveal r2 editable">O dinheiro já está na Zona Sul.</h2>
+    <div class="card-stone reveal r3" style="margin-top:48px;">
+      <div class="stat-grid">
+        <div class="stat"><div class="num editable">R$ 25,7 mil</div><div class="lbl editable">por m² — Leblon fechou 2025 como o metro quadrado mais caro do Brasil (jan/2026)</div></div>
+        <div class="stat"><div class="num editable">+23%</div><div class="lbl editable">valorização da Barra da Tijuca em 12 meses — líder do Rio, maior volume de lançamentos de alto padrão</div></div>
+        <div class="stat"><div class="num editable">R$ 5-8 mil</div><div class="lbl editable">por m² — custo de reforma de alto padrão na Zona Sul, do bruto ao acabamento</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 4. O MODELO ============ -->
+<section class="slide">
+  <div class="content">
+    <div class="kicker reveal r1"><span class="dot">●</span> O modelo</div>
+    <h2 class="reveal r2 editable">Isso não é invenção nossa. É categoria provada.</h2>
+    <div class="case-list">
+      <div class="case-item reveal r3">
+        <div class="case-name editable">Unicus Maison</div>
+        <div class="case-line editable">São Paulo, 2019 — gestora pura, 50 pessoas de equipe, fundador arquiteto com 20 anos de obra</div>
+      </div>
+      <div class="case-item reveal r4">
+        <div class="case-name editable">HCMG Consulting</div>
+        <div class="case-line editable">Miami + Brasil — "Build with Confidence. Live with Peace of Mind."</div>
+      </div>
+      <div class="case-item reveal r5">
+        <div class="case-name editable">Bonaire4</div>
+        <div class="case-line editable">Maiorca, Espanha — mesmo corte de categoria, mercado europeu de segunda residência de luxo</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 5. A BRECHA ============ -->
+<section class="slide">
+  <div class="content">
+    <div class="kicker reveal r1"><span class="dot">●</span> A brecha</div>
+    <h2 class="reveal r2 editable">No Rio, quase todo mundo vende gestão emprestada.</h2>
+    <div class="card-stone reveal r3" style="margin-top:44px;">
+      <div class="compare">
+        <div class="no">
+          <h4>O que já existe</h4>
+          <p class="editable">MXT, Fortau, COE, GDV, Help Reformas: construtoras que também "gerenciam" — e reportam pro cliente sobre a própria obra.</p>
+        </div>
+        <div class="div"></div>
+        <div class="yes">
+          <h4>O que a gente propõe</h4>
+          <p class="editable">Gestora pura, zero execução própria — zero conflito de interesse pra falar de prazo e orçamento.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 6. A SOLUÇÃO ============ -->
+<section class="slide slide--divider">
+  <svg class="skyline" viewBox="0 0 1920 260" preserveAspectRatio="none">
+    <polyline points="0,260 0,190 220,90 420,180 640,60 860,180 1120,110 1400,200 1620,80 1920,180 1920,260" fill="none" stroke="#2C8C86" stroke-width="2" opacity="0.4"/>
+  </svg>
+  <div class="content">
+    <div class="kicker reveal r1"><span class="dot">●</span> A solução</div>
+    <h2 class="big reveal r2 editable">Não construímos. <span class="mark">Coordenamos.</span></h2>
+    <div class="trio">
+      <div class="item reveal r3"><h4 class="editable">Pré-obra</h4><p class="editable">Fornecedor certo, orçamento fechado antes do primeiro tijolo</p></div>
+      <div class="item reveal r4"><h4 class="editable">Execução</h4><p class="editable">Fiscalização de perto, relatório real de prazo e custo</p></div>
+      <div class="item reveal r5"><h4 class="editable">Entrega</h4><p class="editable">Checklist, garantia e o dono voltando pra uma casa pronta</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 7. A OFERTA ============ -->
+<section class="slide">
+  <div class="content">
+    <div class="kicker reveal r1"><span class="dot">●</span> A oferta</div>
+    <h2 class="reveal r2 editable">Fee fixo sobre o valor da obra — e a gente garante o combinado.</h2>
+    <ul class="bullets">
+      <li class="reveal r3 editable"><span>Cobramos pra gerenciar — não pra empurrar execução própria</span></li>
+      <li class="reveal r4 editable"><span>Prazo, orçamento e escopo entram em contrato antes do primeiro tijolo</span></li>
+      <li class="reveal r5 editable"><span>Aqui, garantir o resultado não é aposta: é <b>o produto</b>. Controlar fornecedor, prazo e orçamento é literalmente o nosso trabalho</span></li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============ 8. O ESCOPO INICIAL ============ -->
+<section class="slide">
+  <div class="content">
+    <div class="kicker reveal r1"><span class="dot">●</span> O escopo inicial</div>
+    <h2 class="reveal r2 editable">Reforma de alto padrão. Zona Sul. Só isso, por enquanto.</h2>
+    <ul class="bullets">
+      <li class="reveal r3 editable"><span><b>Leblon, Ipanema, Gávea, Jardim Botânico</b> — onde a demanda já está comprovada</span></li>
+      <li class="reveal r4 editable"><span>Ciclo mais curto e menor risco estrutural do que obra nova</span></li>
+      <li class="reveal r5 editable"><span>Obra nova e casas (Barra, Joá, Itanhangá) ficam pra quando a gente já tiver caixa e prova de conceito</span></li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============ 9. AQUISIÇÃO ============ -->
+<section class="slide">
+  <div class="content">
+    <div class="kicker reveal r1"><span class="dot">●</span> Aquisição</div>
+    <h2 class="reveal r2 editable">A porta de entrada são os arquitetos, não anúncio.</h2>
+    <div class="channels">
+      <div class="channel reveal r3"><div class="n">01</div><h4 class="editable">Parceria com arquitetos de interiores</h4><p class="editable">Da Zona Sul — eles não querem virar gerente de obra do próprio projeto</p></div>
+      <div class="channel reveal r4"><div class="n">02</div><h4 class="editable">Indicação pessoal direta</h4><p class="editable">Nos dois primeiros projetos, pra provar o modelo sem depender de marca</p></div>
+      <div class="channel reveal r5"><div class="n">03</div><h4 class="editable">Motor de conteúdo e tráfego</h4><p class="editable">Puxado pela minha consultoria de marketing e tráfego (a bau), segmentado por bairro nobre, a partir da Fase 2</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 10. A SOCIEDADE ============ -->
+<section class="slide">
+  <div class="content">
+    <div class="kicker reveal r1"><span class="dot">●</span> A sociedade</div>
+    <h2 class="reveal r2 editable">Dois papéis, uma responsabilidade dividida.</h2>
+    <div class="roles">
+      <div class="role reveal r3">
+        <h3 class="editable">Você</h3>
+        <ul>
+          <li class="editable">Responsabilidade técnica<span>ART/RRT de cada obra</span></li>
+          <li class="editable">Fornecedores e execução<span>rede de mestre de obra, marcenaria, acabamento</span></li>
+          <li class="editable">Controle técnico e de qualidade<span>o que garante o "zero surpresa" na prática</span></li>
+        </ul>
+      </div>
+      <div class="div"></div>
+      <div class="role reveal r4">
+        <h3 class="editable">Eu</h3>
+        <ul>
+          <li class="editable">Comercial e aquisição<span>parcerias, indicação, tráfego</span></li>
+          <li class="editable">Marketing e posicionamento<span>marca, conteúdo, relatório pro cliente</span></li>
+          <li class="editable">Operação do dia a dia<span>contrato, cronograma, atendimento</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 11. A MATEMÁTICA ============ -->
+<section class="slide">
+  <div class="content">
+    <div class="kicker reveal r1"><span class="dot">●</span> A matemática</div>
+    <h2 class="reveal r2 editable">Um projeto médio, na conta.</h2>
+    <div class="card-stone reveal r3" style="margin-top:44px;">
+      <div class="math">
+        <div class="term"><div class="v editable">180 m²</div><div class="l editable">apê de referência</div></div>
+        <div class="op">×</div>
+        <div class="term"><div class="v editable">R$ 6,5 mil</div><div class="l editable">por m², ponto médio da faixa</div></div>
+        <div class="op">=</div>
+        <div class="term"><div class="v editable">R$ 1,17 mi</div><div class="l editable">valor total da obra</div></div>
+        <div class="op">→</div>
+        <div class="term result"><div class="v editable">R$ 117 mil</div><div class="l editable">nosso fee, a 10%</div></div>
+      </div>
+      <p class="caption editable">Ticket e fee ilustrativos, com base na faixa de mercado da Zona Sul — a validar juntos.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 12. O POTENCIAL ============ -->
+<section class="slide">
+  <div class="content">
+    <div class="kicker reveal r1"><span class="dot">●</span> O potencial</div>
+    <h2 class="reveal r2 editable">Como isso escala, fase a fase.</h2>
+    <div class="potential">
+      <div class="pcard reveal r3"><div class="phase editable">Fase 1 — prova de conceito</div><div class="val editable">R$ 120-240 mil</div><div class="sub editable">1 a 2 projetos, ainda no braço</div></div>
+      <div class="pcard reveal r4"><div class="phase editable">Fase 2 — sistema</div><div class="val editable">R$ 480-720 mil/ano</div><div class="sub editable">4 a 6 projetos por ano, processo documentado</div></div>
+      <div class="pcard reveal r5"><div class="phase editable">Fase 3 — marca</div><div class="val editable">R$ 1-1,5 mi/ano</div><div class="sub editable">8 a 10 projetos por ano, com marca própria</div></div>
+    </div>
+    <p class="caption caption--dark reveal r6 editable">Cenário ilustrativo, não promessa — é o que a gente testa e ajusta na prática.</p>
+  </div>
+</section>
+
+<!-- ============ 13. O PLANO · CURTO PRAZO ============ -->
+<section class="slide">
+  <div class="content">
+    <div class="kicker reveal r1"><span class="dot">●</span> O plano · curto prazo</div>
+    <h2 class="reveal r2 editable">Fase 0 e Fase 1 — sem gastar, provando o modelo.</h2>
+    <div class="plan-duo">
+      <div class="pplan reveal r3">
+        <h4 class="editable">Fase 0 — Fundação</h4>
+        <ul>
+          <li class="editable">Fechar o acordo de sociedade por escrito</li>
+          <li class="editable">Definir a oferta em 1 página</li>
+          <li class="editable">Validar de 3 a 5 fornecedores de confiança</li>
+        </ul>
+        <div class="crit editable"><b>Critério de sucesso:</b> sociedade combinada, oferta pronta, fornecedores validados</div>
+      </div>
+      <div class="pplan reveal r4">
+        <h4 class="editable">Fase 1 — Prova de conceito</h4>
+        <ul>
+          <li class="editable">Fechar o primeiro cliente via rede pessoal e arquitetos</li>
+          <li class="editable">Entregar documentando tudo — prazo e orçamento reais</li>
+        </ul>
+        <div class="crit editable"><b>Critério de sucesso:</b> 1 contrato assinado, fee recebido, obra entregue</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 14. O PLANO · MÉDIO E LONGO PRAZO ============ -->
+<section class="slide">
+  <div class="content">
+    <div class="kicker reveal r1"><span class="dot">●</span> O plano · médio e longo prazo</div>
+    <h2 class="reveal r2 editable">Fase 2 e Fase 3 — de repetição a marca.</h2>
+    <div class="plan-duo">
+      <div class="pplan reveal r3">
+        <h4 class="editable">Fase 2 — Sistema</h4>
+        <ul>
+          <li class="editable">Processo documentado: checklist, contrato, relatório</li>
+          <li class="editable">2-3 parcerias formais com arquitetos</li>
+          <li class="editable">Motor de conteúdo e tráfego da bau ligado</li>
+        </ul>
+        <div class="crit editable"><b>Critério de sucesso:</b> 2-3 projetos em paralelo, lead que não veio de indicação direta</div>
+      </div>
+      <div class="pplan reveal r4">
+        <h4 class="editable">Fase 3 — Marca</h4>
+        <ul>
+          <li class="editable">Nome, identidade e site com posicionamento afiado</li>
+          <li class="editable">Primeira contratação full-time, se o fluxo sustentar</li>
+          <li class="editable">Avaliar expansão pra obra nova e casas (Barra, Joá)</li>
+        </ul>
+        <div class="crit editable"><b>Critério de sucesso:</b> pipeline recorrente, marca pública, primeira contratação</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 15. OS RISCOS ============ -->
+<section class="slide">
+  <div class="content">
+    <div class="kicker reveal r1"><span class="dot">●</span> Os riscos</div>
+    <h2 class="reveal r2 editable">O que pode dar errado — e o plano pra cada um.</h2>
+    <div class="risks reveal r3">
+      <div class="risk-row"><div class="risk editable">Depender só de indicação pessoal</div><div class="arrow">→</div><div class="fix editable">Parcerias formais com arquitetos desde a Fase 2</div></div>
+      <div class="risk-row"><div class="risk editable">Ciclo de venda longo, ticket alto</div><div class="arrow">→</div><div class="fix editable">Começar por reforma, não por obra nova</div></div>
+      <div class="risk-row"><div class="risk editable">Responsabilidade técnica mal dividida</div><div class="arrow">→</div><div class="fix editable">Acordo escrito antes do primeiro projeto</div></div>
+      <div class="risk-row"><div class="risk editable">Pouco caixa pra aguentar o começo</div><div class="arrow">→</div><div class="fix editable">Modelo asset-light, sem escritório nem equipe fixa</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 16. PENDÊNCIAS ============ -->
+<section class="slide">
+  <div class="content">
+    <div class="kicker reveal r1"><span class="dot">●</span> Pendências</div>
+    <h2 class="reveal r2 editable">O que a gente ainda precisa fechar juntos.</h2>
+    <ul class="bullets">
+      <li class="reveal r3 editable"><span>Formato do acordo: <b>equity</b>, papel de cada um, o que acontece se um sair</span></li>
+      <li class="reveal r4 editable"><span>Ticket mínimo de obra que a gente topa aceitar no início</span></li>
+      <li class="reveal r5 editable"><span>Se a sua rede de fornecedores já dá conta do primeiro projeto</span></li>
+      <li class="reveal r6 editable"><span>Nome e marca — não trava nada agora</span></li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============ 17. PRÓXIMOS PASSOS ============ -->
+<section class="slide">
+  <div class="content">
+    <div class="kicker reveal r1"><span class="dot">●</span> Próximos passos</div>
+    <h2 class="reveal r2 editable">Se topar, é isso que vem primeiro.</h2>
+    <div class="steps">
+      <div class="step reveal r3"><div class="no">01</div><p class="editable">Fechar o acordo entre a gente, por escrito, mesmo que simples</p></div>
+      <div class="step reveal r4"><div class="no">02</div><p class="editable">Mapear os primeiros fornecedores de confiança</p></div>
+      <div class="step reveal r5"><div class="no">03</div><p class="editable">Sair atrás do primeiro cliente — mesmo sem site, mesmo sem marca</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 18. FECHAMENTO ============ -->
+<section class="slide slide--divider">
+  <svg class="skyline" viewBox="0 0 1920 260" preserveAspectRatio="none">
+    <polyline points="0,260 0,190 220,90 420,180 640,60 860,180 1120,110 1400,200 1620,80 1920,180 1920,260" fill="none" stroke="#2C8C86" stroke-width="2" opacity="0.55"/>
+    <polyline points="0,260 0,220 260,150 500,215 760,140 1040,220 1320,170 1600,230 1920,205 1920,260" fill="none" stroke="#C9A063" stroke-width="1.5" opacity="0.4"/>
+  </svg>
+  <div class="content">
+    <div class="kicker reveal r1"><span class="dot">●</span> A decisão é sua</div>
+    <h1 class="reveal r2 editable">Topa construir isso comigo?</h1>
+    <p class="lede reveal r3 editable">Sem promessa de milagre. Com plano, com dado de mercado e com o trabalho já desenhado. Só falta você dizer sim.</p>
+  </div>
+</section>
+
+</main>
+</div>
+
+<!-- ============ DECK CONTROLS ============ -->
+<nav class="deck-controls">
+  <button class="nav-btn" id="prevBtn" aria-label="Slide anterior">‹</button>
+  <span class="page-ind" id="pageInd">01 / 18</span>
+  <button class="nav-btn" id="nextBtn" aria-label="Próximo slide">›</button>
+</nav>
+
+<!-- ============ INLINE EDITING ============ -->
+<div class="edit-hotzone" id="editHotzone"></div>
+<button class="edit-toggle" id="editToggle" title="Modo de edição (E)">✏️</button>
+<div class="toast" id="toast">Salvo</div>
+
+<script>
+/* ===========================================
+   SLIDE PRESENTATION CONTROLLER
+   =========================================== */
+class SlidePresentation{
+  constructor(){
+    this.slides=document.querySelectorAll('.slide');
+    this.total=this.slides.length;
+    this.current=0;
+    this.stage=document.getElementById('deckStage');
+    this.pageInd=document.getElementById('pageInd');
+    this.setupStageScale();
+    this.setupKeyboardNav();
+    this.setupTouchNav();
+    this.setupWheelNav();
+    this.setupButtons();
+    this.showSlide(0);
+  }
+  setupStageScale(){
+    const scale=()=>{
+      const f=Math.min(window.innerWidth/1920, window.innerHeight/1080);
+      const x=(window.innerWidth-1920*f)/2, y=(window.innerHeight-1080*f)/2;
+      this.stage.style.transform=`translate(${x}px, ${y}px) scale(${f})`;
+    };
+    scale();
+    window.addEventListener('resize', scale);
+  }
+  setupKeyboardNav(){
+    document.addEventListener('keydown', (e)=>{
+      if(e.target.getAttribute('contenteditable')==='true') return;
+      if(e.key==='ArrowRight'||e.key===' '||e.key==='PageDown'){ e.preventDefault(); this.next(); }
+      if(e.key==='ArrowLeft'||e.key==='PageUp'){ e.preventDefault(); this.prev(); }
+      if(e.key==='Home'){ this.showSlide(0); }
+      if(e.key==='End'){ this.showSlide(this.total-1); }
+    });
+  }
+  setupTouchNav(){
+    let sx=0;
+    this.stage.addEventListener('touchstart', (e)=>{ sx=e.touches[0].clientX; });
+    this.stage.addEventListener('touchend', (e)=>{
+      const dx=e.changedTouches[0].clientX - sx;
+      if(dx>60) this.prev(); else if(dx<-60) this.next();
+    });
+  }
+  setupWheelNav(){
+    let locked=false;
+    window.addEventListener('wheel', (e)=>{
+      if(locked) return;
+      if(Math.abs(e.deltaY)<30) return;
+      locked=true;
+      if(e.deltaY>0) this.next(); else this.prev();
+      setTimeout(()=>{locked=false;}, 500);
+    }, {passive:true});
+  }
+  setupButtons(){
+    document.getElementById('nextBtn').addEventListener('click', ()=>this.next());
+    document.getElementById('prevBtn').addEventListener('click', ()=>this.prev());
+  }
+  next(){ this.showSlide(this.current+1); }
+  prev(){ this.showSlide(this.current-1); }
+  showSlide(i){
+    this.current=Math.max(0, Math.min(i, this.total-1));
+    this.slides.forEach((s,idx)=>{
+      s.classList.toggle('active', idx===this.current);
+      s.classList.toggle('visible', idx===this.current);
+    });
+    this.pageInd.textContent=String(this.current+1).padStart(2,'0')+' / '+this.total;
+  }
+}
+const deck=new SlidePresentation();
+
+/* ===========================================
+   INLINE EDITING
+   =========================================== */
+class Editor{
+  constructor(){
+    this.isActive=false;
+    this.toggle=document.getElementById('editToggle');
+    this.hotzone=document.getElementById('editHotzone');
+    this.toast=document.getElementById('toast');
+    this.storageKey='deck-gestora-rio-proposta-socio';
+    this.bindHover();
+    this.toggle.addEventListener('click', ()=>this.toggleEditMode());
+    this.hotzone.addEventListener('click', ()=>this.toggleEditMode());
+    document.addEventListener('keydown', (e)=>{
+      if((e.key==='e'||e.key==='E') && !(e.target.getAttribute('contenteditable')==='true')){
+        this.toggleEditMode();
+      }
+      if((e.ctrlKey||e.metaKey) && e.key==='s'){
+        e.preventDefault();
+        this.save();
+      }
+    });
+    this.restore();
+  }
+  bindHover(){
+    let hideTimeout=null;
+    const show=()=>{ clearTimeout(hideTimeout); this.toggle.classList.add('show'); };
+    const scheduleHide=()=>{ hideTimeout=setTimeout(()=>{ if(!this.isActive) this.toggle.classList.remove('show'); }, 400); };
+    this.hotzone.addEventListener('mouseenter', show);
+    this.hotzone.addEventListener('mouseleave', scheduleHide);
+    this.toggle.addEventListener('mouseenter', show);
+    this.toggle.addEventListener('mouseleave', scheduleHide);
+  }
+  toggleEditMode(){
+    this.isActive=!this.isActive;
+    this.toggle.classList.toggle('active', this.isActive);
+    document.querySelectorAll('.editable').forEach(el=>{
+      el.setAttribute('contenteditable', this.isActive ? 'true' : 'false');
+    });
+    if(!this.isActive) this.save();
+  }
+  save(){
+    const data={};
+    document.querySelectorAll('.editable').forEach((el,i)=>{ data[i]=el.innerHTML; });
+    try{ localStorage.setItem(this.storageKey, JSON.stringify(data)); this.showToast('Salvo neste navegador'); }catch(e){}
+  }
+  restore(){
+    try{
+      const raw=localStorage.getItem(this.storageKey);
+      if(!raw) return;
+      const data=JSON.parse(raw);
+      document.querySelectorAll('.editable').forEach((el,i)=>{ if(data[i]!==undefined) el.innerHTML=data[i]; });
+    }catch(e){}
+  }
+  showToast(msg){
+    this.toast.textContent=msg;
+    this.toast.classList.add('show');
+    setTimeout(()=>this.toast.classList.remove('show'), 1600);
+  }
+}
+new Editor();
+</script>
+</body>
+</html>
